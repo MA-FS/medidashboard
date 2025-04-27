@@ -32,7 +32,11 @@ app.layout = dmc.MantineProvider(
             fluid=True,
             px="md",
             py="md",
-            style={"marginTop": "60px"},  # Add top margin to account for fixed navbar
+            style={
+                "marginTop": "70px",  # Increased top margin for better spacing
+                "animation": "fadeIn 0.4s ease-out"  # Add subtle animation
+            },
+            className="dashboard-content"
         ),
         add_reading_modal,  # Place modal outside page content so it can overlay
         view_readings_modal,  # Place view readings modal outside page content
@@ -52,19 +56,7 @@ app.layout = dmc.MantineProvider(
 # Import callbacks to register them
 from .callbacks import routing, dashboard, settings, biomarkers, readings, readings_management, edit_readings, theme
 
-# Add callback to update theme based on color scheme
-@callback(
-    Output("app-theme-provider", "theme"),
-    Input("color-scheme-store", "data")
-)
-def update_theme(color_scheme):
-    """Update the theme based on the color scheme."""
-    if color_scheme == "dark":
-        # Return dark theme
-        return {"colorScheme": "dark"}
-    else:
-        # Return light theme
-        return {"colorScheme": "light"}
+# Theme callback is now in callbacks/theme.py
 
 # Run the app if this file is executed directly
 if __name__ == '__main__':

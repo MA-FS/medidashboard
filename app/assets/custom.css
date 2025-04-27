@@ -154,16 +154,28 @@ body {
 
 /* Navbar styling */
 .navbar {
-  background-color: var(--apple-nav-background) !important;
+  background: linear-gradient(135deg, var(--apple-blue) 0%, rgba(0, 122, 255, 0.8) 100%) !important;
   backdrop-filter: var(--apple-backdrop-blur);
   -webkit-backdrop-filter: var(--apple-backdrop-blur);
-  border-bottom: 1px solid var(--apple-separator);
-  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.05);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
   padding: 12px 20px;
-  transition: background-color 0.3s ease;
+  transition: all 0.3s ease;
   position: sticky;
   top: 0;
   z-index: 1000;
+  animation: navbarAppear 0.5s ease-out;
+}
+
+@keyframes navbarAppear {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .navbar-dark {
@@ -560,17 +572,18 @@ body {
 
 /* Sparkline graph styles - Apple Health style */
 .sparkline-graph {
-    margin-top: 16px;
+    margin-top: 10px; /* Reduced top margin */
+    margin-bottom: 5px; /* Added small bottom margin */
     width: 100%;
     display: block !important;
     position: relative;
     overflow: hidden !important; /* Changed from visible to hidden to prevent scrollbars */
     padding: 0;
-    border-radius: 12px; /* Add border radius for Apple-like appearance */
+    border-radius: 8px; /* Slightly reduced border radius */
     box-shadow: none; /* Remove any shadow */
     background-color: var(--apple-card-background);
-    height: 160px; /* Reduced height to match chart height */
-    max-height: 160px; /* Ensure it doesn't exceed this height */
+    height: 180px; /* Increased height to match chart height */
+    max-height: 180px; /* Ensure it doesn't exceed this height */
 }
 
 /* Biomarker chart styles */
@@ -925,14 +938,150 @@ body {
     overflow-y: auto;
 }
 
+/* Filter card styling */
+.filter-card {
+    border-radius: 16px !important;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08) !important;
+    border: none !important;
+    background-color: white !important;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    animation: filterCardAppear 0.6s ease-out;
+}
+
+@keyframes filterCardAppear {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.filter-title {
+    font-weight: 600;
+    color: var(--apple-text);
+    font-size: 1.2rem;
+    letter-spacing: -0.02em;
+}
+
+/* Modern button styling */
+.add-reading-btn,
+.settings-btn-primary,
+.settings-btn-info,
+.settings-btn-success,
+.settings-btn-warning {
+    transition: all 0.3s ease !important;
+    transform: translateY(0);
+    border: none !important;
+    font-weight: 500 !important;
+    padding: 8px 16px !important;
+    border-radius: 8px !important;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1) !important;
+}
+
+/* Increase spacing between icon and text in buttons */
+.btn i, .mantine-Button-root i {
+    margin-right: 12px !important; /* Increased from default */
+}
+
+/* Green button (Add Reading, Import Data) */
+.add-reading-btn,
+.settings-btn-success {
+    background: linear-gradient(135deg, #28a745 0%, #20c997 100%) !important;
+    box-shadow: 0 4px 10px rgba(40, 167, 69, 0.2) !important;
+}
+
+.add-reading-btn:hover,
+.settings-btn-success:hover {
+    transform: translateY(-2px) !important;
+    box-shadow: 0 6px 15px rgba(40, 167, 69, 0.3) !important;
+}
+
+.add-reading-btn:active,
+.settings-btn-success:active {
+    transform: translateY(0) !important;
+    box-shadow: 0 2px 5px rgba(40, 167, 69, 0.2) !important;
+}
+
+/* Blue button (Add New Biomarker, Validate CSV) */
+.settings-btn-primary {
+    background: linear-gradient(135deg, #007bff 0%, #0056b3 100%) !important;
+    box-shadow: 0 4px 10px rgba(0, 123, 255, 0.2) !important;
+}
+
+.settings-btn-primary:hover {
+    transform: translateY(-2px) !important;
+    box-shadow: 0 6px 15px rgba(0, 123, 255, 0.3) !important;
+}
+
+.settings-btn-primary:active {
+    transform: translateY(0) !important;
+    box-shadow: 0 2px 5px rgba(0, 123, 255, 0.2) !important;
+}
+
+/* Info button (Export CSV, Import Australian Ranges, Download Template) */
+.settings-btn-info {
+    background: linear-gradient(135deg, #17a2b8 0%, #138496 100%) !important;
+    box-shadow: 0 4px 10px rgba(23, 162, 184, 0.2) !important;
+}
+
+.settings-btn-info:hover {
+    transform: translateY(-2px) !important;
+    box-shadow: 0 6px 15px rgba(23, 162, 184, 0.3) !important;
+}
+
+.settings-btn-info:active {
+    transform: translateY(0) !important;
+    box-shadow: 0 2px 5px rgba(23, 162, 184, 0.2) !important;
+}
+
+/* Warning button (Revalidate, Edit) */
+.settings-btn-warning {
+    background: linear-gradient(135deg, #ffc107 0%, #e0a800 100%) !important;
+    box-shadow: 0 4px 10px rgba(255, 193, 7, 0.2) !important;
+}
+
+.settings-btn-warning:hover {
+    transform: translateY(-2px) !important;
+    box-shadow: 0 6px 15px rgba(255, 193, 7, 0.3) !important;
+}
+
+.settings-btn-warning:active {
+    transform: translateY(0) !important;
+    box-shadow: 0 2px 5px rgba(255, 193, 7, 0.2) !important;
+}
+
+/* Danger button (Delete) */
+.settings-btn-danger,
+.btn-danger {
+    background: linear-gradient(135deg, #dc3545 0%, #c82333 100%) !important;
+    box-shadow: 0 4px 10px rgba(220, 53, 69, 0.2) !important;
+    border: none !important;
+    font-weight: 500 !important;
+}
+
+.settings-btn-danger:hover,
+.btn-danger:hover {
+    transform: translateY(-2px) !important;
+    box-shadow: 0 6px 15px rgba(220, 53, 69, 0.3) !important;
+}
+
+.settings-btn-danger:active,
+.btn-danger:active {
+    transform: translateY(0) !important;
+    box-shadow: 0 2px 5px rgba(220, 53, 69, 0.2) !important;
+}
+
 /* Category filter buttons */
 .category-buttons-container {
-    background-color: var(--apple-background);
+    background-color: transparent;
     padding: 10px 0;
-    border-bottom: 1px solid var(--apple-separator);
     display: flex;
     flex-wrap: wrap;
-    gap: 8px;
+    gap: 10px;
     margin-bottom: 16px;
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
@@ -943,18 +1092,27 @@ body {
     display: none; /* Hide scrollbar for Chrome/Safari */
 }
 
+/* Category button styling */
 .category-button {
-    border-radius: 20px;
-    padding: 6px 12px;
-    font-size: 14px;
-    transition: all 0.2s ease;
-    white-space: nowrap;
+    border-radius: 20px !important;
+    font-size: 0.9rem !important;
+    padding: 6px 14px !important;
+    transition: all 0.2s ease !important;
+    border: 1px solid transparent !important;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05) !important;
+}
+
+.category-button:hover {
+    transform: translateY(-1px) !important;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1) !important;
 }
 
 .category-button.selected {
-    background-color: var(--apple-blue);
-    color: white;
+    font-weight: 500 !important;
+    box-shadow: 0 4px 10px rgba(0, 122, 255, 0.2) !important;
 }
+
+/* Removed duplicate category-button styling */
 
 /* Consistent spacing with Apple-like metrics */
 .container-fluid, .container {
@@ -1117,8 +1275,168 @@ body {
     to { opacity: 1; transform: translateY(0); }
 }
 
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+}
+
 .fade-in {
     animation: fadeIn 0.3s ease forwards;
+}
+
+/* Dashboard content animation */
+.dashboard-content {
+    animation: fadeIn 0.4s ease-out;
+}
+
+/* Add subtle hover effect to all cards */
+.card, .mantine-Card-root {
+    transition: all 0.3s ease;
+}
+
+.card:hover, .mantine-Card-root:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+}
+
+/* Dark mode toggle styling */
+.dark-mode-toggle {
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s ease !important;
+}
+
+.dark-mode-toggle:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2) !important;
+}
+
+.dark-mode-toggle:active {
+    transform: translateY(0);
+}
+
+.dark-mode-toggle::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: radial-gradient(circle at center, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0) 70%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.dark-mode-toggle:hover::before {
+    opacity: 1;
+    animation: pulse 1.5s infinite;
+}
+
+/* Modern Apple-style toggle switches */
+.form-switch {
+    padding-left: 3.5em !important;
+    margin-top: 0.5rem !important;
+    margin-bottom: 0.5rem !important;
+}
+
+/* Additional styling for our custom Apple-style switches */
+.apple-switch {
+    margin-left: 10px !important;
+}
+
+/* Container for form switches to ensure proper rendering */
+.form-switch-container {
+    display: flex !important;
+    align-items: center !important;
+    padding: 8px 12px !important;
+    background-color: white !important;
+    border-radius: 8px !important;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1) !important;
+}
+
+/* Dark mode support for form switch container */
+[data-mantine-color-scheme="dark"] .form-switch-container {
+    background-color: #25262b !important;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3) !important;
+}
+
+/* Improved styling for Bootstrap switches */
+.form-check-input[type="checkbox"] {
+    height: 1.5rem !important;
+    width: 3rem !important;
+    border-radius: 1rem !important;
+    background-color: #e9ecef !important;
+    border-color: #ced4da !important;
+    cursor: pointer !important;
+    appearance: none !important;
+    transition: all 0.3s ease !important;
+    position: relative !important;
+}
+
+.form-check-input[type="checkbox"]:checked {
+    background-color: #007bff !important;
+    border-color: #007bff !important;
+}
+
+.form-check-input[type="checkbox"]::before {
+    content: "" !important;
+    position: absolute !important;
+    height: 1.2rem !important;
+    width: 1.2rem !important;
+    left: 0.15rem !important;
+    top: 0.15rem !important;
+    border-radius: 50% !important;
+    background-color: white !important;
+    transform: translateX(0) !important;
+    transition: transform 0.3s ease !important;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2) !important;
+}
+
+.form-check-input[type="checkbox"]:checked::before {
+    transform: translateX(1.5rem) !important;
+}
+
+/* Ensure the label is properly positioned */
+.form-check-label {
+    margin-left: 0.5rem !important;
+    cursor: pointer !important;
+}
+
+.form-switch .form-check-input {
+    width: 3em !important;
+    height: 1.5em !important;
+    margin-left: -3.5em !important;
+    background-color: #e9ecef !important;
+    border-color: #ced4da !important;
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='-4 -4 8 8'%3e%3ccircle r='3' fill='%23fff'/%3e%3c/svg%3e") !important;
+    background-position: left center !important;
+    border-radius: 2em !important;
+    transition: all 0.3s ease !important;
+    cursor: pointer !important;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1) !important;
+}
+
+.form-switch .form-check-input:checked {
+    background-color: var(--apple-blue) !important;
+    border-color: var(--apple-blue) !important;
+    background-position: right center !important;
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='-4 -4 8 8'%3e%3ccircle r='3' fill='%23fff'/%3e%3c/svg%3e") !important;
+    box-shadow: 0 1px 5px rgba(0, 122, 255, 0.3) !important;
+}
+
+.form-switch .form-check-input:focus {
+    box-shadow: 0 0 0 0.25rem rgba(0, 122, 255, 0.25) !important;
+    border-color: var(--apple-blue) !important;
+}
+
+.form-switch .form-check-label {
+    font-weight: 500 !important;
+    color: var(--apple-text) !important;
+    padding-left: 0.5rem !important;
+    cursor: pointer !important;
+    user-select: none !important;
+    transition: color 0.2s ease !important;
 }
 
 /* Apple-style loading animation */

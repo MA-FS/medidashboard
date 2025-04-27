@@ -91,21 +91,35 @@ def create_biomarker_table(biomarkers_data):
             html.Td(
                 dmc.Group([
                     dmc.Button(
-                        "Edit",
+                        [html.I(className="fas fa-edit me-2"), "Edit"],
                         id={'type': 'edit-biomarker', 'index': row['id']},
                         size="sm",
                         color="yellow",
                         variant="filled",
                         radius="md",
+                        className="settings-btn-warning",
+                        style={
+                            "background": "linear-gradient(135deg, #ffc107 0%, #e0a800 100%)",
+                            "boxShadow": "0 2px 5px rgba(255, 193, 7, 0.2)",
+                            "border": "none",
+                            "fontWeight": "500"
+                        },
                         n_clicks=0  # Initialize click count to prevent auto-triggering
                     ),
                     dmc.Button(
-                        "Delete",
+                        [html.I(className="fas fa-trash-alt me-2"), "Delete"],
                         id={'type': 'delete-biomarker', 'index': row['id']},
                         size="sm",
                         color="red",
                         variant="filled",
                         radius="md",
+                        className="settings-btn-danger",
+                        style={
+                            "background": "linear-gradient(135deg, #dc3545 0%, #c82333 100%)",
+                            "boxShadow": "0 2px 5px rgba(220, 53, 69, 0.2)",
+                            "border": "none",
+                            "fontWeight": "500"
+                        },
                         n_clicks=0  # Initialize click count to prevent auto-triggering
                     ),
                 ], gap="md", justify="center")

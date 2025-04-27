@@ -9,23 +9,40 @@ import dash_bootstrap_components as dbc
 dashboard_layout = dbc.Container(fluid=True, className="px-0 g-0", children=[
     dbc.Row([
         dbc.Col([
-            dbc.Row([
-                dbc.Col(html.H4("Filter by Category"), width="auto"),
-                dbc.Col(
-                    dbc.Button([
-                        html.I(className="fas fa-plus me-2"),
-                        "Add New Reading"
-                    ], id="add-reading-button", color="success", className="ms-auto"),
-                    width="auto"
-                ),
-            ], justify="between", align="center", className="mb-3"),
-            html.Div(
-                id='category-filter-buttons',
-                className="category-buttons-container mb-3"
-            ),
-            dcc.Store(id='selected-category-store', data='Lipid Profile'),
-            # Add other filters later if needed (e.g., date range)
-        ], width=3, className="bg-light border p-3 sticky-filter", style={"marginTop": "0"}),
+            dbc.Card([
+                dbc.CardBody([
+                    dbc.Row([
+                        dbc.Col(
+                            html.H4("Filter by Category", className="filter-title mb-0"),
+                            width="auto"
+                        ),
+                        dbc.Col(
+                            dbc.Button([
+                                html.I(className="fas fa-plus me-2"),
+                                "Add New Reading"
+                            ],
+                            id="add-reading-button",
+                            color="success",
+                            className="ms-auto add-reading-btn",
+                            style={
+                                "background": "linear-gradient(135deg, #28a745 0%, #20c997 100%)",
+                                "boxShadow": "0 4px 10px rgba(40, 167, 69, 0.2)",
+                                "border": "none",
+                                "padding": "8px 16px",
+                                "fontWeight": "500"
+                            }),
+                            width="auto"
+                        ),
+                    ], justify="between", align="center", className="mb-3"),
+                    html.Div(
+                        id='category-filter-buttons',
+                        className="category-buttons-container mb-3"
+                    ),
+                    dcc.Store(id='selected-category-store', data='Lipid Profile'),
+                    # Add other filters later if needed (e.g., date range)
+                ])
+            ], className="filter-card"),
+        ], width=3, className="sticky-filter", style={"marginTop": "0"}),
         dbc.Col([
             # Simple loading component with biomarker widget area
             dcc.Loading(
@@ -52,7 +69,12 @@ settings_layout = dbc.Container(fluid=True, className="px-0 g-0", children=[
             dbc.Card(dbc.CardBody([
                 html.H4("Defined Biomarkers", className="card-title"),
                 html.Div(id="biomarker-table-container"),
-                dbc.Button("Add New Biomarker", id="add-biomarker-button", color="primary", className="mt-3"),
+                dbc.Button(
+                    [html.I(className="fas fa-plus me-2"), "Add New Biomarker"],
+                    id="add-biomarker-button",
+                    color="primary",
+                    className="mt-3 settings-btn-primary"
+                ),
                 dcc.Store(id='biomarker-update-trigger', data=0), # Trigger store for table refresh
                 dcc.Store(id='biomarker-delete-id-store', data=None), # Store ID for delete confirmation
                 dcc.ConfirmDialog(
@@ -66,7 +88,12 @@ settings_layout = dbc.Container(fluid=True, className="px-0 g-0", children=[
                 html.H4("Configure Reference Ranges", className="card-title"),
                 html.P("Set reference ranges for your biomarkers to visualize when values are within or outside normal ranges."),
                 html.Div(id="reference-range-container"),
-                dbc.Button("Import Australian Ranges", id="import-australian-ranges-button", color="info", className="mt-3"),
+                dbc.Button(
+                    [html.I(className="fas fa-download me-2"), "Import Australian Ranges"],
+                    id="import-australian-ranges-button",
+                    color="info",
+                    className="mt-3 settings-btn-info"
+                ),
                 html.Div(id="import-ranges-result", className="mt-2"),
                 dcc.Store(id='reference-range-update-trigger', data=0), # Trigger store for refresh
             ]))
@@ -75,7 +102,12 @@ settings_layout = dbc.Container(fluid=True, className="px-0 g-0", children=[
             dbc.Card(dbc.CardBody([
                 html.H4("Data Export & Import", className="card-title"),
                 html.P("Export your biomarker data as CSV or import readings from a CSV file."),
-                dbc.Button("Export Readings as CSV", id="export-csv-button", color="info", className="me-2"),
+                dbc.Button(
+                    [html.I(className="fas fa-file-export me-2"), "Export Readings as CSV"],
+                    id="export-csv-button",
+                    color="info",
+                    className="me-2 settings-btn-info"
+                ),
                 dcc.Download(id="export-csv-download"),
 
                 html.Hr(),
@@ -131,16 +163,37 @@ settings_layout = dbc.Container(fluid=True, className="px-0 g-0", children=[
                     dbc.CardHeader("Step 2: Validate CSV Data"),
                     dbc.CardBody([
                         dbc.Row([
-                            dbc.Col(dbc.Button("Validate CSV", id="validate-csv-button", color="primary", className="mb-3 px-4 py-2", disabled=True), width="auto"),
-                            dbc.Col(dbc.Button("Revalidate", id="revalidate-csv-button", color="warning", className="mb-3 px-4 py-2", style={'display': 'none'}), width="auto"),
                             dbc.Col(
-                                dbc.Switch(
-                                    id="show-all-rows-switch",
-                                    label="Show all rows",
-                                    value=False,
-                                    className="mb-3"
+                                dbc.Button(
+                                    [html.I(className="fas fa-check-circle me-2"), "Validate CSV"],
+                                    id="validate-csv-button",
+                                    color="primary",
+                                    className="mb-3 px-4 py-2 settings-btn-primary",
+                                    disabled=True
                                 ),
                                 width="auto"
+                            ),
+                            dbc.Col(
+                                dbc.Button(
+                                    [html.I(className="fas fa-sync me-2"), "Revalidate"],
+                                    id="revalidate-csv-button",
+                                    color="warning",
+                                    className="mb-3 px-4 py-2 settings-btn-warning",
+                                    style={'display': 'none'}
+                                ),
+                                width="auto"
+                            ),
+                            dbc.Col(
+                                html.Div([
+                                    dbc.Checkbox(
+                                        id="show-all-rows-switch",
+                                        label="Show all rows",
+                                        value=False,
+                                        className="mb-3 apple-switch"
+                                    )
+                                ], className="form-switch-container"),
+                                width="auto",
+                                className="d-flex align-items-center ms-3"
                             ),
                         ]),
                         html.Div(id="csv-validation-summary"),
@@ -157,15 +210,27 @@ settings_layout = dbc.Container(fluid=True, className="px-0 g-0", children=[
                     dbc.CardHeader("Step 3: Import Data"),
                     dbc.CardBody([
                         dbc.Row([
-                            dbc.Col(dbc.Button("Import Data", id="import-csv-button", color="success", className="mb-3", disabled=True), width="auto"),
                             dbc.Col(
-                                dbc.Switch(
-                                    id="skip-duplicates-switch",
-                                    label="Skip duplicates",
-                                    value=True,
-                                    className="mb-3"
+                                dbc.Button(
+                                    [html.I(className="fas fa-file-import me-2"), "Import Data"],
+                                    id="import-csv-button",
+                                    color="success",
+                                    className="mb-3 settings-btn-success",
+                                    disabled=True
                                 ),
                                 width="auto"
+                            ),
+                            dbc.Col(
+                                html.Div([
+                                    dbc.Checkbox(
+                                        id="skip-duplicates-switch",
+                                        label="Skip duplicates",
+                                        value=True,
+                                        className="mb-3 apple-switch"
+                                    )
+                                ], className="form-switch-container"),
+                                width="auto",
+                                className="d-flex align-items-center ms-3"
                             ),
                         ]),
                         html.Div(id='output-readings-upload')
@@ -177,7 +242,12 @@ settings_layout = dbc.Container(fluid=True, className="px-0 g-0", children=[
                     dbc.CardHeader("Need Help?"),
                     dbc.CardBody([
                         html.P("Download a template CSV file to get started:"),
-                        dbc.Button("Download Template", id="download-csv-template", color="info"),
+                        dbc.Button(
+                            [html.I(className="fas fa-file-download me-2"), "Download Template"],
+                            id="download-csv-template",
+                            color="info",
+                            className="settings-btn-info"
+                        ),
                         dcc.Download(id="download-csv-template-data")
                     ])
                 ])

@@ -233,7 +233,7 @@ def create_sparkline_chart(readings, reference_range=None):
                     'y2': [upper_bound]
                 })).mark_rect(
                     color=APPLE_COLORS['green'],
-                    opacity=0.15
+                    opacity=0.18  # Slightly more opaque for better visibility
                 ).encode(
                     y='y1:Q',
                     y2='y2:Q'
@@ -247,7 +247,7 @@ def create_sparkline_chart(readings, reference_range=None):
                     'y2': [lower_bound]
                 })).mark_rect(
                     color=APPLE_COLORS['red'],
-                    opacity=0.15
+                    opacity=0.18  # Slightly more opaque for better visibility
                 ).encode(
                     y='y1:Q',
                     y2='y2:Q'
@@ -261,7 +261,7 @@ def create_sparkline_chart(readings, reference_range=None):
                     'y2': [max_value]
                 })).mark_rect(
                     color=APPLE_COLORS['red'],
-                    opacity=0.15
+                    opacity=0.18  # Slightly more opaque for better visibility
                 ).encode(
                     y='y1:Q',
                     y2='y2:Q'
@@ -275,7 +275,7 @@ def create_sparkline_chart(readings, reference_range=None):
                     'y2': [upper_bound]
                 })).mark_rect(
                     color=APPLE_COLORS['green'],
-                    opacity=0.15
+                    opacity=0.18  # Slightly more opaque for better visibility
                 ).encode(
                     y='y1:Q',
                     y2='y2:Q'
@@ -289,7 +289,7 @@ def create_sparkline_chart(readings, reference_range=None):
                     'y2': [max_value]
                 })).mark_rect(
                     color=APPLE_COLORS['red'],
-                    opacity=0.15
+                    opacity=0.18  # Slightly more opaque for better visibility
                 ).encode(
                     y='y1:Q',
                     y2='y2:Q'
@@ -303,7 +303,7 @@ def create_sparkline_chart(readings, reference_range=None):
                     'y2': [lower_bound]
                 })).mark_rect(
                     color=APPLE_COLORS['red'],
-                    opacity=0.15
+                    opacity=0.18  # Slightly more opaque for better visibility
                 ).encode(
                     y='y1:Q',
                     y2='y2:Q'
@@ -317,7 +317,7 @@ def create_sparkline_chart(readings, reference_range=None):
                     'y2': [max_value]
                 })).mark_rect(
                     color=APPLE_COLORS['green'],
-                    opacity=0.15
+                    opacity=0.18  # Slightly more opaque for better visibility
                 ).encode(
                     y='y1:Q',
                     y2='y2:Q'
@@ -332,17 +332,20 @@ def create_sparkline_chart(readings, reference_range=None):
     base = alt.Chart(df).encode(
         x=alt.X('timestamp:T',
                 axis=alt.Axis(
-                    format='%b %Y',  # Format as "Apr 2018"
-                    labelAngle=-30,  # Reduce angle to prevent overflow
+                    format='%b',  # Format as "Apr" (month only to save space)
+                    labelAngle=0,  # Horizontal labels for better readability
                     title=None,
                     labelColor=APPLE_COLORS['gray'],
                     labelFont='SF Pro Display, -apple-system, BlinkMacSystemFont, sans-serif',
-                    labelFontSize=8,  # Reduce font size to fit better
+                    labelFontSize=9,  # Slightly larger font for better readability
                     tickColor=APPLE_COLORS['light_gray'],
                     domainColor=APPLE_COLORS['light_gray'],
                     labelOverlap='parity',  # Handle label overlap
-                    labelLimit=50,  # Limit label width
-                    labelPadding=2  # Reduce padding
+                    labelLimit=30,  # Limit label width
+                    labelPadding=2,  # Minimal padding for better space usage
+                    tickCount=4,  # Limit the number of ticks to prevent overcrowding
+                    offset=0,  # Position axis at the edge of the chart
+                    orient='bottom'  # Ensure axis is at the bottom
                 )),
         y=alt.Y('value:Q',
                 scale=alt.Scale(
@@ -354,16 +357,18 @@ def create_sparkline_chart(readings, reference_range=None):
                     title=None,
                     labelColor=APPLE_COLORS['gray'],
                     labelFont='SF Pro Display, -apple-system, BlinkMacSystemFont, sans-serif',
-                    labelFontSize=8,  # Reduce font size to fit better
+                    labelFontSize=9,  # Slightly larger font for better readability
                     tickColor=APPLE_COLORS['light_gray'],
                     domainColor=APPLE_COLORS['light_gray'],
                     grid=True,
                     gridColor=APPLE_COLORS['light_gray'],
                     gridOpacity=0.3,
                     gridDash=[2, 2],
-                    labelLimit=40,  # Limit label width
-                    labelPadding=2,  # Reduce padding
-                    tickCount=5  # Limit the number of ticks for cleaner appearance
+                    labelLimit=30,  # Limit label width
+                    labelPadding=2,  # Minimal padding for better space usage
+                    tickCount=4,  # Fewer ticks for cleaner appearance
+                    offset=0,  # Position axis at the edge of the chart
+                    orient='left'  # Ensure axis is at the left
                 )),
         tooltip=[
             alt.Tooltip('formatted_date:N', title='Date'),
@@ -374,9 +379,9 @@ def create_sparkline_chart(readings, reference_range=None):
     # Create the line chart with smooth interpolation
     line = base.mark_line(
         color=APPLE_COLORS['blue'],
-        strokeWidth=2,
+        strokeWidth=2.5,  # Slightly thicker line for better visibility
         interpolate='monotone',  # Smooth, curved lines
-        strokeOpacity=0.8
+        strokeOpacity=0.9  # Slightly more opaque for better visibility
     )
 
     # Create a single hover selection
@@ -394,7 +399,7 @@ def create_sparkline_chart(readings, reference_range=None):
         filled=True,
         shape='circle'
     ).encode(
-        size=alt.condition(hover, alt.value(120), alt.value(80)),
+        size=alt.condition(hover, alt.value(100), alt.value(60)),  # Slightly smaller points
         opacity=alt.condition(hover, alt.value(1), alt.value(0.8)),
         stroke=alt.condition(hover, alt.value('white'), alt.value(None)),
         strokeWidth=alt.condition(hover, alt.value(2), alt.value(0))
@@ -405,7 +410,7 @@ def create_sparkline_chart(readings, reference_range=None):
         align='center',
         baseline='bottom',
         dy=-10,  # Offset above the point
-        fontSize=12,
+        fontSize=11,  # Slightly smaller font size
         fontWeight='bold',
         font='SF Pro Display, -apple-system, BlinkMacSystemFont, sans-serif',
         color=APPLE_COLORS['dark_gray']
@@ -422,8 +427,8 @@ def create_sparkline_chart(readings, reference_range=None):
                 alt.Chart(pd.DataFrame({'y': [lower_bound]})).mark_rule(
                     color=APPLE_COLORS['orange'],
                     strokeDash=[4, 2],
-                    strokeWidth=1,
-                    opacity=0.7
+                    strokeWidth=1.5,  # Slightly thicker for better visibility
+                    opacity=0.8  # Slightly more opaque for better visibility
                 ).encode(
                     y='y:Q',
                     tooltip=alt.Tooltip('y:Q', title='Lower Bound', format='.2f')
@@ -434,8 +439,8 @@ def create_sparkline_chart(readings, reference_range=None):
                 alt.Chart(pd.DataFrame({'y': [upper_bound]})).mark_rule(
                     color=APPLE_COLORS['red'],
                     strokeDash=[4, 2],
-                    strokeWidth=1,
-                    opacity=0.7
+                    strokeWidth=1.5,  # Slightly thicker for better visibility
+                    opacity=0.8  # Slightly more opaque for better visibility
                 ).encode(
                     y='y:Q',
                     tooltip=alt.Tooltip('y:Q', title='Upper Bound', format='.2f')
@@ -452,25 +457,27 @@ def create_sparkline_chart(readings, reference_range=None):
     chart = chart.configure_view(
         strokeWidth=0,
         strokeOpacity=0,
-        continuousHeight=160,  # Reduce height to ensure content fits
-        continuousWidth=320    # Reduce width to ensure content fits
+        continuousHeight=180,  # Increase height to provide more space
+        continuousWidth=320    # Maintain width to fit container
     ).properties(
         width='container',  # Responsive width to fit container
-        height=160,         # Reduced height to prevent scrollbar
-        padding={'left': 10, 'right': 10, 'top': 10, 'bottom': 10},  # Add padding to ensure all elements fit
+        height=180,         # Increased height to accommodate labels
+        padding={'left': 2, 'right': 2, 'top': 5, 'bottom': 20},  # Minimal padding to maximize chart area
         autosize={'type': 'fit', 'contains': 'padding'},  # Ensure chart fits within container
         usermeta={"embedOptions": {"actions": False}}  # Disable the three-dot menu
     ).configure_axis(
         grid=False,
         labelColor=APPLE_COLORS['gray'],
         domainColor=APPLE_COLORS['light_gray'],
-        labelFontSize=8,  # Reduce font size to ensure labels fit
-        labelLimit=80     # Limit label width to prevent overflow
+        labelFontSize=9,  # Slightly larger font for better readability
+        labelLimit=80,    # Limit label width to prevent overflow
+        labelPadding=2,   # Minimal padding for labels
+        tickSize=3        # Smaller tick marks
     )
 
     return chart
 
-def embed_altair_chart(chart, height=160):
+def embed_altair_chart(chart, height=180):
     """
     Embeds an Altair chart in a Dash application with responsive design.
 
@@ -630,14 +637,23 @@ brand = dmc.Group([
     dmc.Text("MediDashboard", fw=700, size="lg", c="white")  # Explicitly set text color to white
 ], gap="xs")
 
-# Create dark mode toggle
+# Create dark mode toggle with improved styling
 dark_mode_toggle = dmc.ActionIcon(
-    html.I(className="fas fa-moon"),
+    html.I(className="fas fa-moon", id="dark-mode-icon"),
     id="dark-mode-toggle",
-    variant="outline",
+    variant="filled",
     color="blue",
     radius="xl",
-    size="lg"
+    size="lg",
+    style={
+        "boxShadow": "0 2px 8px rgba(0, 0, 0, 0.15)",
+        "transition": "all 0.3s ease",
+        "background": "rgba(255, 255, 255, 0.2)",
+        "border": "1px solid rgba(255, 255, 255, 0.3)",
+        "backdropFilter": "blur(5px)",
+        "WebkitBackdropFilter": "blur(5px)"
+    },
+    className="dark-mode-toggle"
 )
 
 # Create navbar links
@@ -656,10 +672,13 @@ navbar = html.Div(
         "left": 0,
         "right": 0,
         "padding": "var(--mantine-spacing-md)",
-        "backgroundColor": "var(--mantine-color-blue-6)",
+        "background": "linear-gradient(135deg, var(--mantine-color-blue-7) 0%, var(--mantine-color-blue-5) 100%)",
         "color": "white",
         "marginBottom": "0px",
-        "zIndex": 100
+        "zIndex": 100,
+        "boxShadow": "0 2px 10px rgba(0, 0, 0, 0.1)",
+        "backdropFilter": "blur(10px)",
+        "WebkitBackdropFilter": "blur(10px)"
     },
     children=[
         dmc.Container(
@@ -1268,8 +1287,27 @@ biomarker_modal = dmc.Modal(
         # Footer with buttons
         dmc.Group(
             [
-                dmc.Button("Save", id="biomarker-modal-save-button", color="blue", variant="filled", n_clicks=0),
-                dmc.Button("Cancel", id="biomarker-modal-cancel-button", variant="outline", color="gray", n_clicks=0)
+                dmc.Button(
+                    [html.I(className="fas fa-save me-2"), "Save"],
+                    id="biomarker-modal-save-button",
+                    color="blue",
+                    variant="filled",
+                    className="settings-btn-primary",
+                    style={
+                        "background": "linear-gradient(135deg, #007bff 0%, #0056b3 100%)",
+                        "boxShadow": "0 4px 10px rgba(0, 123, 255, 0.2)",
+                        "border": "none",
+                        "fontWeight": "500"
+                    },
+                    n_clicks=0
+                ),
+                dmc.Button(
+                    [html.I(className="fas fa-times me-2"), "Cancel"],
+                    id="biomarker-modal-cancel-button",
+                    variant="outline",
+                    color="gray",
+                    n_clicks=0
+                )
             ],
             justify="flex-end",
             mt="xl"
@@ -1427,17 +1465,17 @@ def create_biomarker_card(biomarker, readings=None, reference_range=None):
 
     # Create the card body with value and timestamp
     body_content = [
-        html.H3(formatted_value, className=f"text-{color} mb-2")
+        html.H3(formatted_value, className=f"text-{color} mb-1")  # Reduced margin
     ]
 
     # Add timestamp text
     if timestamp_text:
-        body_content.append(html.P(timestamp_text, className="text-muted small mb-2"))
+        body_content.append(html.P(timestamp_text, className="text-muted small mb-1"))  # Reduced margin
 
     # Create the card body with position relative for the risk indicator
     body = dmc.CardSection(
         body_content,
-        p="sm",
+        p="xs",  # Reduced padding
         withBorder=False,
         style={"position": "relative"}
     )
@@ -1449,7 +1487,7 @@ def create_biomarker_card(biomarker, readings=None, reference_range=None):
         # Add a placeholder div to maintain consistent height when there's no graph
         placeholder = html.Div(
             style={
-                "height": "160px",  # Same height as the sparkline graph
+                "height": "180px",  # Same height as the sparkline graph
                 "width": "100%",
                 "marginTop": "10px",
                 "marginBottom": "10px"
@@ -1473,7 +1511,7 @@ def create_biomarker_card(biomarker, readings=None, reference_range=None):
                 id={'type': 'view-readings-button', 'index': biomarker['id']},
                 color="gray",
                 variant="light",
-                size="lg",
+                size="md",  # Slightly smaller size
                 radius="xl",
                 style={
                     "boxShadow": "0 1px 3px rgba(0,0,0,0.1)",
@@ -1492,7 +1530,7 @@ def create_biomarker_card(biomarker, readings=None, reference_range=None):
                 id={'type': 'add-reading-button', 'index': biomarker['id']},
                 color="blue",
                 variant="filled",
-                size="lg",
+                size="md",  # Slightly smaller size
                 radius="xl",
                 style={
                     "boxShadow": "0 2px 4px rgba(0,0,0,0.2)",
@@ -1501,7 +1539,7 @@ def create_biomarker_card(biomarker, readings=None, reference_range=None):
                 className="action-icon-hover"
             )
         )
-    ], justify="center", mt="md", mb="xs")
+    ], justify="center", mt="xs", mb="xs")
 
     body.children.append(action_buttons)
 
