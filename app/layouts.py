@@ -9,7 +9,16 @@ import dash_bootstrap_components as dbc
 dashboard_layout = dbc.Container(fluid=True, className="px-0 g-0", children=[
     dbc.Row([
         dbc.Col([
-            html.H4("Filter by Category"),
+            dbc.Row([
+                dbc.Col(html.H4("Filter by Category"), width="auto"),
+                dbc.Col(
+                    dbc.Button([
+                        html.I(className="fas fa-plus me-2"),
+                        "Add New Reading"
+                    ], id="add-reading-button", color="success", className="ms-auto"),
+                    width="auto"
+                ),
+            ], justify="between", align="center", className="mb-3"),
             html.Div(
                 id='category-filter-buttons',
                 className="category-buttons-container mb-3"
@@ -18,10 +27,6 @@ dashboard_layout = dbc.Container(fluid=True, className="px-0 g-0", children=[
             # Add other filters later if needed (e.g., date range)
         ], width=3, className="bg-light border p-3 sticky-filter", style={"marginTop": "0"}),
         dbc.Col([
-            dbc.Row([
-                 dbc.Col(html.H4("Biomarker Widgets"), width='auto'),
-                 dbc.Col(dbc.Button("Add New Reading", id="add-reading-button", color="success", className="ms-auto"), width='auto'),
-            ], justify="between", align="center", className="mb-3"),
             # Simple loading component with biomarker widget area
             dcc.Loading(
                 id="loading-biomarkers",

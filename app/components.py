@@ -674,7 +674,24 @@ navbar = html.Div(
 
 # --- View Readings Modal Structure ---
 view_readings_modal = dmc.Modal(
-    title=dmc.Text(id="view-readings-modal-title", fw=700, size="lg"),
+    title=dmc.Group([
+        html.I(className="fas fa-chart-line me-2", style={"color": "var(--mantine-color-blue-6)"}),
+        dmc.Text(id="view-readings-modal-title", fw=700, size="lg")
+    ]),
+    styles={
+        "modal": {
+            "borderRadius": "16px",
+            "boxShadow": "0 10px 40px rgba(0, 0, 0, 0.15)",
+        },
+        "header": {
+            "backgroundColor": "var(--mantine-color-gray-0)",
+            "borderBottom": "1px solid var(--mantine-color-gray-2)",
+            "padding": "20px 24px",
+        },
+        "body": {
+            "padding": "24px",
+        }
+    },
     children=[
         # Hidden store to keep track of the biomarker ID
         dcc.Store(id='view-readings-biomarker-id-store', data=None),
@@ -685,7 +702,15 @@ view_readings_modal = dmc.Modal(
         # Footer with close button
         dmc.Group(
             [
-                dmc.Button("Close", id="view-readings-close-button", variant="outline", color="gray")
+                dmc.Button(
+                    "Close",
+                    id="view-readings-close-button",
+                    variant="outline",
+                    color="gray",
+                    radius="md",
+                    size="md",
+                    leftSection=html.I(className="fas fa-times")
+                )
             ],
             justify="flex-end",
             mt="xl"
@@ -694,22 +719,62 @@ view_readings_modal = dmc.Modal(
     id="view-readings-modal",
     size="lg",
     opened=False,
-    transitionProps={"duration": 300},
-    overlayProps={"blur": 3},
+    transitionProps={"duration": 300, "transition": "slide-up"},
+    overlayProps={"blur": 5, "opacity": 0.55},
+    centered=True,
+    shadow="xl"
 )
 
 # --- Delete Reading Confirmation Modal ---
 delete_reading_confirm_modal = dmc.Modal(
-    title=dmc.Text("Confirm Deletion", fw=700, size="lg"),
+    title=dmc.Group([
+        html.I(className="fas fa-trash-alt me-2", style={"color": "var(--mantine-color-red-6)"}),
+        dmc.Text("Confirm Deletion", fw=700, size="lg")
+    ]),
+    styles={
+        "modal": {
+            "borderRadius": "16px",
+            "boxShadow": "0 10px 40px rgba(0, 0, 0, 0.15)",
+        },
+        "header": {
+            "backgroundColor": "var(--mantine-color-gray-0)",
+            "borderBottom": "1px solid var(--mantine-color-gray-2)",
+            "padding": "20px 24px",
+        },
+        "body": {
+            "padding": "24px",
+        }
+    },
     children=[
         # Hidden store to keep track of the reading ID to delete
         dcc.Store(id='delete-reading-id-store', data=None),
-        dmc.Text("Are you sure you want to delete this reading? This action cannot be undone.", mb="md"),
+        dmc.Alert(
+            title="Warning",
+            color="red",
+            children="Are you sure you want to delete this reading? This action cannot be undone.",
+            icon=html.I(className="fas fa-exclamation-triangle"),
+            mb="md"
+        ),
         # Footer with buttons
         dmc.Group(
             [
-                dmc.Button("Delete", id="delete-reading-confirm-button", color="red", variant="filled"),
-                dmc.Button("Cancel", id="delete-reading-cancel-button", variant="outline", color="gray")
+                dmc.Button(
+                    "Delete",
+                    id="delete-reading-confirm-button",
+                    color="red",
+                    variant="filled",
+                    radius="md",
+                    size="md",
+                    leftSection=html.I(className="fas fa-trash-alt")
+                ),
+                dmc.Button(
+                    "Cancel",
+                    id="delete-reading-cancel-button",
+                    variant="outline",
+                    color="gray",
+                    radius="md",
+                    size="md"
+                )
             ],
             justify="flex-end",
             mt="xl"
@@ -717,13 +782,32 @@ delete_reading_confirm_modal = dmc.Modal(
     ],
     id="delete-reading-confirm-modal",
     opened=False,
-    transitionProps={"duration": 300},
-    overlayProps={"blur": 3},
+    transitionProps={"duration": 300, "transition": "slide-up"},
+    overlayProps={"blur": 5, "opacity": 0.55},
+    centered=True,
+    shadow="xl"
 )
 
 # --- Edit Reading Modal ---
 edit_reading_modal = dmc.Modal(
-    title=dmc.Text("Edit Reading", fw=700, size="lg"),
+    title=dmc.Group([
+        html.I(className="fas fa-edit me-2", style={"color": "var(--mantine-color-blue-6)"}),
+        dmc.Text("Edit Reading", fw=700, size="lg")
+    ]),
+    styles={
+        "modal": {
+            "borderRadius": "16px",
+            "boxShadow": "0 10px 40px rgba(0, 0, 0, 0.15)",
+        },
+        "header": {
+            "backgroundColor": "var(--mantine-color-gray-0)",
+            "borderBottom": "1px solid var(--mantine-color-gray-2)",
+            "padding": "20px 24px",
+        },
+        "body": {
+            "padding": "24px",
+        }
+    },
     children=[
         # Hidden stores to keep track of the reading ID and biomarker ID
         dcc.Store(id='edit-reading-id-store', data=None),
@@ -780,8 +864,23 @@ edit_reading_modal = dmc.Modal(
         # Footer with buttons
         dmc.Group(
             [
-                dmc.Button("Save", id="edit-reading-save-button", color="blue", variant="filled"),
-                dmc.Button("Cancel", id="edit-reading-cancel-button", variant="outline", color="gray")
+                dmc.Button(
+                    "Save",
+                    id="edit-reading-save-button",
+                    color="blue",
+                    variant="filled",
+                    radius="md",
+                    size="md",
+                    leftSection=html.I(className="fas fa-save")
+                ),
+                dmc.Button(
+                    "Cancel",
+                    id="edit-reading-cancel-button",
+                    variant="outline",
+                    color="gray",
+                    radius="md",
+                    size="md"
+                )
             ],
             justify="flex-end",
             mt="xl"
@@ -790,8 +889,10 @@ edit_reading_modal = dmc.Modal(
     id="edit-reading-modal",
     opened=False,
     size="md",
-    transitionProps={"duration": 300},
-    overlayProps={"blur": 3},
+    transitionProps={"duration": 300, "transition": "slide-up"},
+    overlayProps={"blur": 5, "opacity": 0.55},
+    centered=True,
+    shadow="xl"
 )
 
 # --- CSV Preview and Validation Components ---
@@ -1311,36 +1412,14 @@ def create_biomarker_card(biomarker, readings=None, reference_range=None):
                 # No need for separate reference range labels as they're now part of the chart
             ], className="sparkline-graph")
 
-    # Create the card header with biomarker name, unit, and buttons
+    # Create the card header with biomarker name and unit only
     header = dmc.CardSection(
         dmc.Group([
             dmc.Group([
                 dmc.Text(biomarker['name'], fw=700, size="lg"),
                 dmc.Text(f"({biomarker['unit']})", c="dimmed", size="sm")
-            ], gap="xs"),
-            dmc.Group([
-                # View Readings button with eye icon
-                dmc.ActionIcon(
-                    html.I(className="fas fa-eye"),
-                    id={'type': 'view-readings-button', 'index': biomarker['id']},
-                    color="gray",
-                    variant="light",
-                    size="lg",
-                    radius="xl",
-                    style={"boxShadow": "0 1px 3px rgba(0,0,0,0.1)"}
-                ),
-                # Add Reading button with plus icon
-                dmc.ActionIcon(
-                    html.I(className="fas fa-plus"),
-                    id={'type': 'add-reading-button', 'index': biomarker['id']},
-                    color="blue",
-                    variant="filled",
-                    size="lg",
-                    radius="xl",
-                    style={"boxShadow": "0 2px 4px rgba(0,0,0,0.2)"}
-                )
-            ], gap="md")
-        ], justify="space-between"),
+            ], gap="xs")
+        ], justify="flex-start"),
         withBorder=True,
         py="sm",
         px="md"
@@ -1366,10 +1445,65 @@ def create_biomarker_card(biomarker, readings=None, reference_range=None):
     # Add the sparkline as the main content - it will now take up most of the card
     if sparkline:
         body.children.append(sparkline)
+    else:
+        # Add a placeholder div to maintain consistent height when there's no graph
+        placeholder = html.Div(
+            style={
+                "height": "160px",  # Same height as the sparkline graph
+                "width": "100%",
+                "marginTop": "10px",
+                "marginBottom": "10px"
+            }
+        )
+        body.children.append(placeholder)
 
     # Add the risk indicator to the card body if available
     if risk_indicator:
         body.children.append(risk_indicator)
+
+    # Add action buttons at the bottom of the card, after the sparkline
+    action_buttons = dmc.Group([
+        # View Readings button with eye icon
+        dmc.Tooltip(
+            label="View Readings",
+            position="top",
+            withArrow=True,
+            children=dmc.ActionIcon(
+                html.I(className="fas fa-eye"),
+                id={'type': 'view-readings-button', 'index': biomarker['id']},
+                color="gray",
+                variant="light",
+                size="lg",
+                radius="xl",
+                style={
+                    "boxShadow": "0 1px 3px rgba(0,0,0,0.1)",
+                    "transition": "all 0.2s ease",
+                },
+                className="action-icon-hover"
+            )
+        ),
+        # Add Reading button with plus icon
+        dmc.Tooltip(
+            label="Add Reading",
+            position="top",
+            withArrow=True,
+            children=dmc.ActionIcon(
+                html.I(className="fas fa-plus"),
+                id={'type': 'add-reading-button', 'index': biomarker['id']},
+                color="blue",
+                variant="filled",
+                size="lg",
+                radius="xl",
+                style={
+                    "boxShadow": "0 2px 4px rgba(0,0,0,0.2)",
+                    "transition": "all 0.2s ease",
+                },
+                className="action-icon-hover"
+            )
+        )
+    ], justify="center", mt="md", mb="xs")
+
+    body.children.append(action_buttons)
 
     # Create the card
     card = dmc.Card(
@@ -1481,7 +1615,24 @@ def create_range_indicator(value, reference_range):
 
 # --- Data Entry Modal Structure ---
 add_reading_modal = dmc.Modal(
-    title=dmc.Text("Add New Biomarker Reading", fw=700, size="lg"),
+    title=dmc.Group([
+        html.I(className="fas fa-plus-circle me-2", style={"color": "var(--mantine-color-blue-6)"}),
+        dmc.Text("Add New Biomarker Reading", fw=700, size="lg")
+    ]),
+    styles={
+        "modal": {
+            "borderRadius": "16px",
+            "boxShadow": "0 10px 40px rgba(0, 0, 0, 0.15)",
+        },
+        "header": {
+            "backgroundColor": "var(--mantine-color-gray-0)",
+            "borderBottom": "1px solid var(--mantine-color-gray-2)",
+            "padding": "20px 24px",
+        },
+        "body": {
+            "padding": "24px",
+        }
+    },
     children=[
         # Biomarker dropdown
         dmc.Grid(
@@ -1490,7 +1641,8 @@ add_reading_modal = dmc.Modal(
                 dmc.GridCol(
                     dcc.Dropdown(
                         id="modal-biomarker-dropdown",
-                        placeholder="Select Biomarker..."
+                        placeholder="Select Biomarker...",
+                        className="apple-dropdown"
                     ),
                     span=9
                 )
@@ -1560,8 +1712,25 @@ add_reading_modal = dmc.Modal(
         # Footer with buttons
         dmc.Group(
             [
-                dmc.Button("Save", id="modal-save-button", color="blue", variant="filled", n_clicks=0),
-                dmc.Button("Cancel", id="modal-cancel-button", variant="outline", color="gray", n_clicks=0)
+                dmc.Button(
+                    "Save",
+                    id="modal-save-button",
+                    color="blue",
+                    variant="filled",
+                    n_clicks=0,
+                    radius="md",
+                    size="md",
+                    leftSection=html.I(className="fas fa-check")
+                ),
+                dmc.Button(
+                    "Cancel",
+                    id="modal-cancel-button",
+                    variant="outline",
+                    color="gray",
+                    n_clicks=0,
+                    radius="md",
+                    size="md"
+                )
             ],
             justify="flex-end",
             mt="xl"
@@ -1570,6 +1739,8 @@ add_reading_modal = dmc.Modal(
     id="add-reading-modal",
     opened=False,
     size="lg",
-    transitionProps={"duration": 300},
-    overlayProps={"blur": 3},
+    transitionProps={"duration": 300, "transition": "slide-up"},
+    overlayProps={"blur": 5, "opacity": 0.55},
+    centered=True,
+    shadow="xl"
 )

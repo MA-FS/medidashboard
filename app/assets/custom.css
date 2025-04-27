@@ -1312,9 +1312,83 @@ body {
   position: static; /* Help with date picker positioning */
 }
 
-/* Add specific styling for the add reading modal */
-#add-reading-modal .modal-body {
-  padding-bottom: 32px; /* Extra padding at bottom for date picker */
+/* Modal styling */
+.mantine-Modal-root {
+  animation: modal-appear 0.3s ease-out;
+}
+
+@keyframes modal-appear {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Apple-style dropdown */
+.apple-dropdown .Select-control {
+  border-radius: 8px;
+  border: 1px solid var(--apple-separator);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  transition: all 0.2s ease;
+}
+
+.apple-dropdown .Select-control:hover {
+  border-color: var(--apple-blue);
+}
+
+.apple-dropdown .is-focused:not(.is-open) > .Select-control {
+  border-color: var(--apple-blue);
+  box-shadow: 0 0 0 2px rgba(0, 122, 255, 0.2);
+}
+
+/* Action icon hover effects */
+.action-icon-hover {
+  transition: all 0.2s ease !important;
+}
+
+.action-icon-hover:hover {
+  transform: scale(1.1) !important;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15) !important;
+}
+
+/* Biomarker card action buttons */
+.biomarker-card .mantine-Group-root {
+  margin-top: 12px;
+  border-top: 1px solid var(--apple-separator);
+  padding-top: 12px;
+}
+
+/* Ensure consistent height for biomarker cards */
+.biomarker-card {
+  display: flex;
+  flex-direction: column;
+  min-height: 320px; /* Set a minimum height for all cards */
+  height: 100%;
+}
+
+.biomarker-card .mantine-Card-section:last-child {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Position action buttons at the bottom */
+.biomarker-card .mantine-Group-root:last-child {
+  margin-top: auto;
+  position: relative;
+  bottom: 0;
+  width: 100%;
+}
+
+/* Ensure consistent spacing for cards with and without graphs */
+.sparkline-graph {
+  flex-grow: 1;
+  min-height: 160px;
+  margin-bottom: 10px;
 }
 
 /* Background logo styling removed */
