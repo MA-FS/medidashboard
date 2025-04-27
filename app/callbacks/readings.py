@@ -9,7 +9,7 @@ from datetime import datetime
 from .. import bll
 
 @callback(
-    Output("add-reading-modal", "is_open"),
+    Output("add-reading-modal", "opened"),
     Output("modal-biomarker-dropdown", "value", allow_duplicate=True),
     Output("modal-datetime-input", "value", allow_duplicate=True),  # Keep for backward compatibility
     Output("modal-date-picker", "date", allow_duplicate=True),
@@ -20,17 +20,20 @@ from .. import bll
     Input("add-reading-button", "n_clicks"),
     Input("modal-save-button", "n_clicks"),
     Input("modal-cancel-button", "n_clicks"),
-    State("add-reading-modal", "is_open"),
+    State("add-reading-modal", "opened"),
     prevent_initial_call=True
 )
 def toggle_add_reading_modal(add_clicks, save_clicks, cancel_clicks, is_open):
     """Opens/closes the Add Reading modal."""
     # Check if any trigger exists
+    ctx = dash.callback_context
     if not ctx.triggered:
         return is_open, dash.no_update, dash.no_update, dash.no_update, dash.no_update, dash.no_update, dash.no_update, dash.no_update
 
     # Get the ID of the element that triggered the callback
     triggered_id = ctx.triggered_id
+
+    print(f"Toggle modal triggered by: {triggered_id}")
 
     # Handle the "Add New Reading" button click
     if triggered_id == "add-reading-button" and add_clicks and add_clicks > 0:
@@ -51,7 +54,7 @@ def toggle_add_reading_modal(add_clicks, save_clicks, cancel_clicks, is_open):
 
 @callback(
     Output("modal-biomarker-dropdown", "options"),
-    Input("add-reading-modal", "is_open"),
+    Input("add-reading-modal", "opened"),
     prevent_initial_call=True
 )
 def populate_biomarker_dropdown(is_open):

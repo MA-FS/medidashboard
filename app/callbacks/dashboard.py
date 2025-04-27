@@ -12,6 +12,7 @@ except ImportError:
             return lambda *args, **kwargs: html.Div()
     dbc = DummyDBC()
 from dash import Input, Output, callback, dcc, html, ALL, State, no_update
+import dash_mantine_components as dmc
 import pandas as pd
 from datetime import datetime, timedelta
 from dateutil.relativedelta import relativedelta
@@ -23,7 +24,7 @@ from ..utils import calculate_start_date
 from ..components import create_biomarker_card
 
 @callback(
-    Output("add-reading-modal", "is_open", allow_duplicate=True),
+    Output("add-reading-modal", "opened", allow_duplicate=True),
     Output("modal-biomarker-dropdown", "value", allow_duplicate=True),
     Output("modal-datetime-input", "value", allow_duplicate=True),
     Output("modal-date-picker", "date", allow_duplicate=True),
@@ -44,6 +45,8 @@ def open_add_reading_modal_from_card(n_clicks_list):
     ctx = dash.callback_context
     if not ctx.triggered:
         return dash.no_update, dash.no_update, dash.no_update, dash.no_update, dash.no_update, dash.no_update, dash.no_update, dash.no_update
+
+    print("Add reading button clicked from card")
 
     # Get the ID of the clicked button
     button_id = ctx.triggered[0]['prop_id'].split('.')[0]
@@ -67,15 +70,23 @@ def open_add_reading_modal_from_card(n_clicks_list):
 
 @callback(
     Output("biomarker-widget-area", "children"),
-    Output("category-filter-dropdown", "options"),
-    Output("category-filter-dropdown", "value"),  # Add output for dropdown value
-    Input("category-filter-dropdown", "value"),
+    Output("category-filter-buttons", "children"),
+    Output("selected-category-store", "data"),
+    Input("selected-category-store", "data"),
     Input("reading-update-trigger", "data"),
     Input("dashboard-visible-biomarkers-store", "data"),
-    Input("chart-time-range-store", "data") # Add time range store as Input
+    Input("chart-time-range-store", "data"), # Add time range store as Input
+    Input({"type": "category-button", "index": ALL}, "n_clicks"),
+    prevent_initial_call=False
 )
-def update_dashboard(selected_category, reading_trigger, visible_biomarker_ids, time_range_pref):
+def update_dashboard(selected_category, reading_trigger, visible_biomarker_ids, time_range_pref, button_clicks):
     """Updates the dashboard widgets based on filters, visibility, time range, and updates."""
+    ctx = dash.callback_context
+
+    # Check if a category button was clicked
+    if ctx.triggered_id and isinstance(ctx.triggered_id, dict) and ctx.triggered_id.get('type') == 'category-button':
+        selected_category = ctx.triggered_id.get('index')
+
     print(f"Updating dashboard. Category: {selected_category}, Trigger: {reading_trigger}, Visible IDs: {visible_biomarker_ids}, Time: {time_range_pref}")
 
     # Add a small delay to ensure the loading animation is visible
@@ -90,13 +101,11 @@ def update_dashboard(selected_category, reading_trigger, visible_biomarker_ids, 
 
     all_biomarkers = bll.get_all_biomarkers_grouped()
 
-    # Populate category filter options
+    # Get all categories for buttons
     categories = sorted(list(set(b['category'] for b in all_biomarkers if b['category'])))
-    category_options = [{'label': 'All Categories', 'value': 'All'}] + \
-                       [{'label': cat, 'value': cat} for cat in categories]
 
     # Ensure selected_category is valid, default to 'Lipid Profile' if not
-    if selected_category is None or selected_category not in ['All'] + [opt['value'] for opt in category_options[1:]]:
+    if selected_category is None or selected_category not in ['All'] + categories:
         selected_category = 'Lipid Profile'
         print(f"Setting default category to 'Lipid Profile'")
 
@@ -116,11 +125,24 @@ def update_dashboard(selected_category, reading_trigger, visible_biomarker_ids, 
         category_filtered_biomarkers = [b for b in filtered_biomarkers if b['id'] in visible_set]
         print(f"Applying visibility filter. Showing {len(category_filtered_biomarkers)} biomarkers.")
 
+    # Create category buttons
+    category_buttons = []
+    for cat in ['All'] + categories:
+        is_selected = cat == selected_category
+        button = dbc.Button(
+            cat,
+            id={"type": "category-button", "index": cat},
+            color="primary" if is_selected else "light",
+            outline=not is_selected,
+            className=f"category-button {'selected' if is_selected else ''}",
+        )
+        category_buttons.append(button)
+
     if not category_filtered_biomarkers:
         alert_message = "No biomarkers found."
         if selected_category != 'All' or (visible_biomarker_ids is not None and visible_biomarker_ids != "ALL"):
             alert_message += " Adjust category or visibility settings."
-        return dbc.Alert(alert_message, color="warning"), category_options, selected_category
+        return dbc.Alert(alert_message, color="warning"), category_buttons, selected_category
 
     # Calculate start date based on preference
     start_date_iso = calculate_start_date(time_range_pref)
@@ -188,13 +210,18 @@ def update_dashboard(selected_category, reading_trigger, visible_biomarker_ids, 
 
                 # Create biomarker card with readings
                 card = create_biomarker_card(biomarker, readings, reference_range)
-                cards.append(dbc.Col(card, width=6, className="mb-3"))
+                cards.append(card)
 
         # Create a section for this category (we know it has at least one biomarker with readings)
         if cards:  # This check is redundant but kept for safety
             category_section = html.Div([
                 html.H4(category, className="category-title"),
-                dbc.Row(cards, className="mb-4")
+                dmc.SimpleGrid(
+                    children=cards,
+                    cols={"base": 1, "sm": 2, "lg": 3},
+                    spacing="md",
+                    className="mb-4"
+                )
             ], className="category-section")
 
             sections.append(category_section)
@@ -223,7 +250,7 @@ def update_dashboard(selected_category, reading_trigger, visible_biomarker_ids, 
                     "Add Reading"
                 ], id="add-reading-button", color="primary")
             ], className="empty-biomarkers-state")
-        ]), category_options, selected_category
+        ]), category_buttons, selected_category
 
     # If no sections were created (which can happen if all biomarkers with readings were filtered out)
     if not sections:
@@ -239,13 +266,13 @@ def update_dashboard(selected_category, reading_trigger, visible_biomarker_ids, 
                 dbc.Button([
                     html.I(className="fas fa-sync me-2"),
                     "Show Lipid Profile"
-                ], id="category-filter-dropdown", value="Lipid Profile", n_clicks=0, color="primary", className="me-2"),
+                ], id={"type": "category-button", "index": "Lipid Profile"}, n_clicks=0, color="primary", className="me-2"),
                 dbc.Button([
                     html.I(className="fas fa-plus me-2"),
                     "Add Reading"
                 ], id="add-reading-button", color="success")
             ], className="empty-biomarkers-state")
-        ]), category_options, selected_category
+        ]), category_buttons, selected_category
 
     print(f"Returning {len(sections)} sections")
-    return sections, category_options, selected_category
+    return sections, category_buttons, selected_category

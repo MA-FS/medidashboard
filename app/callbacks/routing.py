@@ -8,7 +8,7 @@ from ..layouts import dashboard_layout, settings_layout, get_404_layout
 
 @callback(
     Output('page-content', 'children'),
-    Output('biomarker-modal', 'is_open', allow_duplicate=True),
+    Output('biomarker-modal', 'opened', allow_duplicate=True),
     [Input('url', 'pathname')],
     prevent_initial_call='initial_duplicate'
 )

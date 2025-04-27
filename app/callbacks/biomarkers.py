@@ -9,7 +9,7 @@ from .. import bll
 from ..utils import create_biomarker_table
 
 @callback(
-    Output("biomarker-modal", "is_open"),
+    Output("biomarker-modal", "opened"),
     Output("biomarker-modal-title", "children"),
     Output("biomarker-edit-id-store", "data"), # Store the id for editing
     Output("biomarker-modal-name", "value"),
@@ -20,7 +20,7 @@ from ..utils import create_biomarker_table
     Input({'type': 'edit-biomarker', 'index': ALL}, 'n_clicks'),
     Input("biomarker-modal-save-button", "n_clicks"), # Close on save
     Input("biomarker-modal-cancel-button", "n_clicks"), # Close on cancel
-    State("biomarker-modal", "is_open"),
+    State("biomarker-modal", "opened"),
     prevent_initial_call=True
 )
 def toggle_biomarker_modal(add_clicks, edit_clicks, save_clicks, cancel_clicks, is_open):

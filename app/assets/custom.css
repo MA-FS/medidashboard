@@ -72,7 +72,7 @@ p, .body-text {
   --apple-gray6: rgb(242, 242, 247);
 
   /* Semantic colors - Light Mode */
-  --apple-background: rgb(255, 255, 255);
+  --apple-background: rgb(225, 225, 230); /* Even darker background for better contrast */
   --apple-elevated-background: rgb(255, 255, 255);
   --apple-text: rgb(0, 0, 0);
   --apple-text-secondary: rgb(60, 60, 67);
@@ -84,8 +84,8 @@ p, .body-text {
   --apple-card-background: rgb(255, 255, 255);
   --apple-nav-background: rgba(255, 255, 255, 0.85);
   --apple-nav-text: rgb(0, 0, 0);
-  --apple-card-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-  --apple-card-shadow-hover: 0 4px 12px rgba(0, 0, 0, 0.12);
+  --apple-card-shadow: 0 2px 8px rgba(0, 0, 0, 0.12); /* Enhanced shadow */
+  --apple-card-shadow-hover: 0 4px 12px rgba(0, 0, 0, 0.18); /* Enhanced hover shadow */
   --apple-backdrop-blur: saturate(180%) blur(20px);
 
   /* Status colors - Light Mode */
@@ -118,7 +118,7 @@ p, .body-text {
     --apple-gray6: rgb(28, 28, 30);
 
     /* Semantic colors - Dark Mode */
-    --apple-background: rgb(0, 0, 0);
+    --apple-background: rgb(18, 18, 20); /* Slightly lighter than pure black for contrast */
     --apple-elevated-background: rgb(28, 28, 30);
     --apple-text: rgb(255, 255, 255);
     --apple-text-secondary: rgba(235, 235, 245, 0.6);
@@ -130,8 +130,8 @@ p, .body-text {
     --apple-card-background: rgb(28, 28, 30);
     --apple-nav-background: rgba(0, 0, 0, 0.85);
     --apple-nav-text: rgb(255, 255, 255);
-    --apple-card-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
-    --apple-card-shadow-hover: 0 4px 12px rgba(0, 0, 0, 0.6);
+    --apple-card-shadow: 0 2px 8px rgba(0, 0, 0, 0.6); /* Enhanced shadow */
+    --apple-card-shadow-hover: 0 4px 12px rgba(0, 0, 0, 0.8); /* Enhanced hover shadow */
 
     /* Status colors - Dark Mode */
     --apple-success-background: rgba(48, 209, 88, 0.12);
@@ -147,6 +147,11 @@ p, .body-text {
 }
 
 /* Apply colors to components */
+/* Apply background color to the entire page */
+body {
+  background-color: var(--apple-background);
+}
+
 /* Navbar styling */
 .navbar {
   background-color: var(--apple-nav-background) !important;
@@ -356,7 +361,7 @@ p, .body-text {
 
 /* Background colors */
 .bg-light {
-  background-color: var(--apple-gray6) !important;
+  background-color: var(--apple-background) !important;
 }
 
 .bg-primary {
@@ -395,6 +400,44 @@ p, .body-text {
 .card:hover {
   box-shadow: var(--apple-card-shadow-hover);
   transform: translateY(-2px);
+}
+
+/* CSV Preview Table Styling */
+.csv-preview-table {
+  font-size: 0.9rem;
+  table-layout: fixed;
+  width: 100%;
+}
+
+.csv-preview-table th,
+.csv-preview-table td {
+  padding: 0.5rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 150px;
+}
+
+/* Set specific column widths */
+.csv-preview-table th:first-child,
+.csv-preview-table td:first-child {
+  width: 50px; /* Status column */
+}
+
+.csv-preview-table th:nth-child(2),
+.csv-preview-table td:nth-child(2) {
+  width: 80px; /* Row Number column */
+}
+
+.csv-preview-table th:last-child,
+.csv-preview-table td:last-child {
+  width: 60px; /* Actions column */
+}
+
+/* Make sure the table doesn't overflow horizontally */
+.csv-preview-table-container {
+  overflow-x: hidden !important;
+  width: 100%;
 }
 
 .card-header {
@@ -873,6 +916,46 @@ p, .body-text {
 
 /* ----- Layout and Spacing ----- */
 
+/* Sticky filter section */
+.sticky-filter {
+    position: sticky;
+    top: 60px; /* Adjust based on navbar height */
+    z-index: 100;
+    max-height: calc(100vh - 60px);
+    overflow-y: auto;
+}
+
+/* Category filter buttons */
+.category-buttons-container {
+    background-color: var(--apple-background);
+    padding: 10px 0;
+    border-bottom: 1px solid var(--apple-separator);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 16px;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none; /* Firefox */
+}
+
+.category-buttons-container::-webkit-scrollbar {
+    display: none; /* Hide scrollbar for Chrome/Safari */
+}
+
+.category-button {
+    border-radius: 20px;
+    padding: 6px 12px;
+    font-size: 14px;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+}
+
+.category-button.selected {
+    background-color: var(--apple-blue);
+    color: white;
+}
+
 /* Consistent spacing with Apple-like metrics */
 .container-fluid, .container {
     padding-left: 24px;
@@ -1234,32 +1317,4 @@ p, .body-text {
   padding-bottom: 32px; /* Extra padding at bottom for date picker */
 }
 
-/* Background logo styling */
-.background-logo {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 60vh; /* Size relative to viewport height */
-  height: 60vh;
-  opacity: 0.2; /* Increased opacity to make it more visible */
-  z-index: -1; /* Behind all content */
-  pointer-events: none; /* Ensures clicks pass through to elements below */
-  object-fit: contain; /* Maintain aspect ratio */
-}
-
-/* Dark mode adjustments for background logo */
-@media (prefers-color-scheme: dark) {
-  .background-logo {
-    opacity: 0.15; /* Increased opacity but still subtle in dark mode */
-    filter: brightness(0.8); /* Dim the logo slightly in dark mode */
-  }
-}
-
-/* Responsive adjustments for small screens */
-@media (max-width: 768px) {
-  .background-logo {
-    width: 50vh; /* Smaller on mobile devices */
-    height: 50vh;
-  }
-}
+/* Background logo styling removed */

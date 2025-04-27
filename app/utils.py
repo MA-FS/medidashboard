@@ -12,6 +12,7 @@ from datetime import datetime, timedelta
 from dateutil.relativedelta import relativedelta
 from dash import html
 import dash_bootstrap_components as dbc
+import dash_mantine_components as dmc
 
 def calculate_start_date(range_option: str):
     """
@@ -72,7 +73,12 @@ def create_biomarker_table(biomarkers_data):
     df_display = df[['name', 'unit', 'category', 'id']] # Include id for button actions
 
     table_header = [
-        html.Thead(html.Tr([html.Th("Name"), html.Th("Unit"), html.Th("Category"), html.Th("Actions")]))
+        html.Thead(html.Tr([
+            html.Th("Name", style={"fontWeight": "bold"}),
+            html.Th("Unit", style={"fontWeight": "bold"}),
+            html.Th("Category", style={"fontWeight": "bold"}),
+            html.Th("Actions", style={"fontWeight": "bold", "textAlign": "center"})
+        ]))
     ]
 
     table_body = [html.Tbody([
@@ -82,24 +88,40 @@ def create_biomarker_table(biomarkers_data):
             # Improved handling of None/empty category values
             html.Td(row['category'] if pd.notna(row['category']) and row['category'] else '-'),
             # Add action buttons (Edit/Delete) here in the next step
-            html.Td([
-                 dbc.Button(
-                     "Edit",
-                     id={'type': 'edit-biomarker', 'index': row['id']},
-                     size="sm",
-                     color="warning",
-                     className="me-1",
-                     n_clicks=0  # Initialize click count to prevent auto-triggering
-                 ),
-                 dbc.Button(
-                     "Delete",
-                     id={'type': 'delete-biomarker', 'index': row['id']},
-                     size="sm",
-                     color="danger",
-                     n_clicks=0  # Initialize click count to prevent auto-triggering
-                 ),
-            ])
+            html.Td(
+                dmc.Group([
+                    dmc.Button(
+                        "Edit",
+                        id={'type': 'edit-biomarker', 'index': row['id']},
+                        size="sm",
+                        color="yellow",
+                        variant="filled",
+                        radius="md",
+                        n_clicks=0  # Initialize click count to prevent auto-triggering
+                    ),
+                    dmc.Button(
+                        "Delete",
+                        id={'type': 'delete-biomarker', 'index': row['id']},
+                        size="sm",
+                        color="red",
+                        variant="filled",
+                        radius="md",
+                        n_clicks=0  # Initialize click count to prevent auto-triggering
+                    ),
+                ], gap="md", justify="center")
+            )
         ]) for _, row in df_display.iterrows()  # Use _ instead of unused index variable
     ])]
 
-    return dbc.Table(table_header + table_body, bordered=True, striped=True, hover=True, responsive=True)
+    return dmc.Paper(
+        dmc.Table(
+            table_header + table_body,
+            striped=True,
+            highlightOnHover=True,
+            withTableBorder=True,
+            withColumnBorders=True
+        ),
+        shadow="sm",
+        p="md",
+        radius="md"
+    )

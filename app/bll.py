@@ -76,7 +76,11 @@ def get_all_biomarkers_grouped():
     """Retrieves all biomarkers, potentially grouped by category (future enhancement)."""
     # For now, just return the flat list from DAL
     # Grouping logic can be added here later if needed for UI
-    return dal.get_all_biomarkers()
+    biomarkers = dal.get_all_biomarkers()
+    print(f"BLL: Retrieved {len(biomarkers)} biomarkers from DAL")
+    if not biomarkers:
+        print("WARNING: No biomarkers returned from DAL.get_all_biomarkers()")
+    return biomarkers
 
 def get_biomarker_details(biomarker_id: int):
     """Gets details for a single biomarker."""

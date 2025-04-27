@@ -6,19 +6,17 @@ from dash import dcc, html
 import dash_bootstrap_components as dbc
 
 # --- Dashboard Layout ---
-dashboard_layout = dbc.Container([
+dashboard_layout = dbc.Container(fluid=True, className="px-0 g-0", children=[
     dbc.Row([
         dbc.Col([
             html.H4("Filter by Category"),
-            dcc.Dropdown(
-                id='category-filter-dropdown',
-                options=[], # Populated by callback
-                value='Lipid Profile', # Default to Lipid Profile instead of All
-                clearable=False,
-                className="mb-3"
+            html.Div(
+                id='category-filter-buttons',
+                className="category-buttons-container mb-3"
             ),
+            dcc.Store(id='selected-category-store', data='Lipid Profile'),
             # Add other filters later if needed (e.g., date range)
-        ], width=3, className="bg-light border p-3"),
+        ], width=3, className="bg-light border p-3 sticky-filter", style={"marginTop": "0"}),
         dbc.Col([
             dbc.Row([
                  dbc.Col(html.H4("Biomarker Widgets"), width='auto'),
@@ -37,11 +35,11 @@ dashboard_layout = dbc.Container([
             # Note: The actual dashboard-visible-biomarkers-store is defined in app.py with storage_type='local'
             dcc.Store(id='chart-time-range-store', data='all') # Store for time range preference - 'all' shows all readings
         ], width=9),
-    ])
-], fluid=True)
+    ], className="g-0")
+])
 
 # --- Settings Layout ---
-settings_layout = dbc.Container([
+settings_layout = dbc.Container(fluid=True, className="px-0 g-0", children=[
     html.H3("Settings"),
     # Use dcc.Tabs for callbacks triggered by tab activation
     dcc.Tabs(id="settings-tabs", value='tab-manage-biomarkers', children=[
@@ -128,8 +126,8 @@ settings_layout = dbc.Container([
                     dbc.CardHeader("Step 2: Validate CSV Data"),
                     dbc.CardBody([
                         dbc.Row([
-                            dbc.Col(dbc.Button("Validate CSV", id="validate-csv-button", color="primary", className="mb-3", disabled=True), width="auto"),
-                            dbc.Col(dbc.Button("Revalidate", id="revalidate-csv-button", color="warning", className="mb-3", style={'display': 'none'}), width="auto"),
+                            dbc.Col(dbc.Button("Validate CSV", id="validate-csv-button", color="primary", className="mb-3 px-4 py-2", disabled=True), width="auto"),
+                            dbc.Col(dbc.Button("Revalidate", id="revalidate-csv-button", color="warning", className="mb-3 px-4 py-2", style={'display': 'none'}), width="auto"),
                             dbc.Col(
                                 dbc.Switch(
                                     id="show-all-rows-switch",
@@ -144,7 +142,7 @@ settings_layout = dbc.Container([
                         dbc.Collapse([
                             html.H5("CSV Preview", className="mt-3"),
                             html.P("The table below shows a preview of your CSV data with validation status. You can edit rows with errors and then click Revalidate."),
-                            html.Div(id="csv-preview-table", style={"maxHeight": "400px", "overflow": "auto"})
+                            html.Div(id="csv-preview-table", style={"maxHeight": "400px", "overflowY": "auto", "overflowX": "hidden"})
                         ], id="csv-preview-collapse", is_open=False)
                     ])
                 ], className="mb-3"),
@@ -182,15 +180,15 @@ settings_layout = dbc.Container([
         ]),
         # Add other settings tabs here if needed (e.g., Appearance, Formatting)
     ])
-], fluid=True)
+])
 
 # --- 404 Layout ---
 def get_404_layout(pathname):
     """Returns a 404 layout for unknown routes."""
-    return dbc.Container([
+    return dbc.Container(fluid=True, className="px-0 g-0", children=[
         html.Div([
             html.H1("404: Not found", className="text-danger"),
             html.Hr(),
             html.P(f"The pathname {pathname} was not recognised..."),
         ], className="p-5 bg-light rounded-3")
-    ], fluid=True)
+    ])

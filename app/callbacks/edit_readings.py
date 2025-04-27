@@ -14,7 +14,7 @@ import app.bll as bll
 # --- Edit Reading Modal Callbacks ---
 
 @callback(
-    Output("edit-reading-modal", "is_open"),
+    Output("edit-reading-modal", "opened"),
     Output("edit-reading-id-store", "data"),
     Output("edit-reading-biomarker-id-store", "data"),
     Output("edit-reading-biomarker-unit-store", "data"),
@@ -26,7 +26,7 @@ import app.bll as bll
     Input({"type": "edit-reading-button", "index": ALL}, "n_clicks"),
     Input("edit-reading-save-button", "n_clicks"),
     Input("edit-reading-cancel-button", "n_clicks"),
-    State("edit-reading-modal", "is_open"),
+    State("edit-reading-modal", "opened"),
     State("view-readings-biomarker-id-store", "data"),
     prevent_initial_call=True
 )

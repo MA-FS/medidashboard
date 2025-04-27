@@ -1,0 +1,14 @@
+# Sample biomarker readings for import
+# Format: Biomarker Name, Date, Time, Value, Unit
+# Note: Time is optional, Unit helps with matching
+
+Testosterone, 2023-11-15, 8:00, 20, ng/dL
+Testosterone, 2024-08-01, 8:00, 33.6, ng/dL
+Testosterone, 2025-02-19, 8:00, 9.7, ng/dL
+Testosterone, 2025-02-26, 8:00, 12.1, ng/dL
+Testosterone, 2025-03-12, 8:00, 23.9, ng/dL
+Estradiol, 2019-02-15, 8:00, 50, pg/mL
+Estradiol, 2024-08-01, 8:00, 161, pg/mL
+Estradiol, 2025-02-19, 8:00, <100, pg/mL
+Estradiol, 2025-03-12, 8:00, 126, pg/mL
+Prolactin, 2024-08-01, 8:00, 180, ng/mL

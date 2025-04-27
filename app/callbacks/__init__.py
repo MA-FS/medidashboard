@@ -10,3 +10,4 @@ from . import biomarkers
 from . import readings
 from . import readings_management
 from . import edit_readings
+from . import theme  # Theme settings including dark mode

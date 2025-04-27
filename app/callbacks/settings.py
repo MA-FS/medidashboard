@@ -13,6 +13,7 @@ import traceback
 from datetime import datetime
 from dash import Input, Output, State, callback, html, dcc, ALL
 import dash_bootstrap_components as dbc
+import dash_mantine_components as dmc
 
 from .. import bll
 from ..utils import create_biomarker_table
@@ -34,7 +35,7 @@ def update_biomarker_table(active_tab, trigger):
     return "" # Return empty if other tab is active
 
 @callback(
-    Output("biomarker-modal", "is_open", allow_duplicate=True),
+    Output("biomarker-modal", "opened", allow_duplicate=True),
     Input("settings-tabs", "value"),
     prevent_initial_call='initial_duplicate'
 )
@@ -55,86 +56,157 @@ def update_reference_range_container(active_tab, trigger):
     if active_tab != "tab-reference-ranges":
         return ""
 
-    # Get all biomarkers and their reference ranges
-    biomarkers = bll.get_all_biomarkers_grouped()
+    try:
+        # Get all biomarkers and their reference ranges
+        biomarkers = bll.get_all_biomarkers_grouped()
 
-    # Create a form for each biomarker
-    forms = []
-    for biomarker in biomarkers:
-        # Get reference range for this biomarker
-        reference_range = bll.get_reference_range_for_biomarker(biomarker['id'])
+        # Log the number of biomarkers retrieved
+        print(f"Retrieved {len(biomarkers)} biomarkers for reference ranges")
 
-        # Set default values
-        range_type = reference_range.get('range_type', 'between') if reference_range else 'between'
-        lower_bound = reference_range.get('lower_bound', None) if reference_range else None
-        upper_bound = reference_range.get('upper_bound', None) if reference_range else None
+        # Log the first few biomarkers for debugging
+        if biomarkers:
+            print(f"First few biomarkers: {biomarkers[:3]}")
+        else:
+            print("WARNING: No biomarkers retrieved from database")
 
-        # Create form
-        form = dbc.Form([
-            dbc.Row([
-                dbc.Col([
-                    html.H5(f"{biomarker['name']} ({biomarker['unit']})")
-                ], width=12)
-            ], className="mb-2"),
-            dbc.Row([
-                dbc.Col([
-                    dbc.Label("Range Type"),
-                    dcc.Dropdown(
-                        id={'type': 'range-type-dropdown', 'index': biomarker['id']},
-                        options=[
-                            {'label': 'Below', 'value': 'below'},
-                            {'label': 'Above', 'value': 'above'},
-                            {'label': 'Between', 'value': 'between'}
-                        ],
-                        value=range_type,
-                        clearable=False
-                    )
-                ], width=4),
-                dbc.Col([
-                    dbc.Label("Lower Bound"),
-                    dbc.Input(
-                        id={'type': 'lower-bound-input', 'index': biomarker['id']},
-                        type="number",
-                        value=lower_bound,
-                        disabled=range_type == 'below'
-                    )
-                ], width=3),
-                dbc.Col([
-                    dbc.Label("Upper Bound"),
-                    dbc.Input(
-                        id={'type': 'upper-bound-input', 'index': biomarker['id']},
-                        type="number",
-                        value=upper_bound,
-                        disabled=range_type == 'above'
-                    )
-                ], width=3),
-                dbc.Col([
-                    html.Div(style={'height': '32px'}),  # Spacer to align button with inputs
-                    dbc.Button(
-                        "Save",
-                        id={'type': 'save-range-button', 'index': biomarker['id']},
-                        color="primary",
-                        size="sm"
-                    )
-                ], width=2)
-            ])
-        ], className="mb-4")
+        # Create a form for each biomarker
+        forms = []
+        for biomarker in biomarkers:
+            try:
+                # Get reference range for this biomarker
+                reference_range = bll.get_reference_range_for_biomarker(biomarker['id'])
+                print(f"Reference range for biomarker {biomarker['name']} (ID: {biomarker['id']}): {reference_range}")
 
-        forms.append(form)
+                # Set default values
+                range_type = reference_range.get('range_type', 'between') if reference_range else 'between'
+                lower_bound = reference_range.get('lower_bound', None) if reference_range else None
+                upper_bound = reference_range.get('upper_bound', None) if reference_range else None
 
-    # If no biomarkers, show a message
-    if not forms:
-        return dbc.Alert("No biomarkers defined yet. Add biomarkers first.", color="info")
+                # Create form with Mantine components
+                form = dmc.Paper(
+                    children=[
+                        dmc.Group([
+                            dmc.Title(f"{biomarker['name']}", order=5, mb="md"),
+                            dmc.Badge(biomarker['unit'], color="blue", size="lg", variant="light")
+                        ], justify="space-between", mb="md"),
 
-    return html.Div(forms)
+                        dmc.Grid(
+                            children=[
+                                dmc.GridCol(
+                                    span=4,
+                                    children=[
+                                        dmc.Select(
+                                            label="Range Type",
+                                            id={'type': 'range-type-dropdown', 'index': biomarker['id']},
+                                            data=[
+                                                {'label': 'Below', 'value': 'below'},
+                                                {'label': 'Above', 'value': 'above'},
+                                                {'label': 'Between', 'value': 'between'}
+                                            ],
+                                            value=range_type,
+                                            clearable=False,
+                                            size="md",
+                                            radius="md"
+                                        )
+                                    ]
+                                ),
+                                dmc.GridCol(
+                                    span=3,
+                                    children=[
+                                        dmc.NumberInput(
+                                            label="Lower Bound",
+                                            id={'type': 'lower-bound-input', 'index': biomarker['id']},
+                                            value=lower_bound,
+                                            disabled=range_type == 'below',
+                                            size="md",
+                                            decimalScale=2,
+                                            step=0.1,
+                                            radius="md"
+                                        )
+                                    ]
+                                ),
+                                dmc.GridCol(
+                                    span=3,
+                                    children=[
+                                        dmc.NumberInput(
+                                            label="Upper Bound",
+                                            id={'type': 'upper-bound-input', 'index': biomarker['id']},
+                                            value=upper_bound,
+                                            disabled=range_type == 'above',
+                                            size="md",
+                                            decimalScale=2,
+                                            step=0.1,
+                                            radius="md"
+                                        )
+                                    ]
+                                ),
+                                dmc.GridCol(
+                                    span=2,
+                                    children=[
+                                        dmc.Group(
+                                            justify="right",
+                                            mt=32,  # Align with inputs
+                                            children=[
+                                                dmc.Button(
+                                                    "Save",
+                                                    id={'type': 'save-range-button', 'index': biomarker['id']},
+                                                    color="blue",
+                                                    variant="filled",
+                                                    size="md",
+                                                    radius="md"
+                                                )
+                                            ]
+                                        )
+                                    ]
+                                )
+                            ],
+                            gutter="md"
+                        )
+                    ],
+                    p="lg",
+                    radius="md",
+                    withBorder=True,
+                    shadow="sm",
+                    mb="lg"
+                )
+
+                forms.append(form)
+            except Exception as e:
+                print(f"Error creating form for biomarker {biomarker.get('name', 'unknown')}: {str(e)}")
+                # Continue with the next biomarker instead of failing completely
+                continue
+
+        # If no biomarkers, show a message
+        if not forms:
+            return dmc.Alert("No biomarkers defined yet. Add biomarkers first.", color="blue", variant="filled")
+
+        return dmc.Stack(
+            children=forms,
+            gap="md"
+        )
+    except Exception as e:
+        print(f"Error in update_reference_range_container: {str(e)}")
+        import traceback
+        traceback.print_exc()
+        return dmc.Alert(
+            f"An error occurred while loading reference ranges: {str(e)}",
+            color="red",
+            variant="filled"
+        )
 
 @callback(
     Output({'type': 'lower-bound-input', 'index': dash.ALL}, 'disabled'),
     Output({'type': 'upper-bound-input', 'index': dash.ALL}, 'disabled'),
-    Input({'type': 'range-type-dropdown', 'index': dash.ALL}, 'value')
+    Input({'type': 'range-type-dropdown', 'index': dash.ALL}, 'value'),
+    prevent_initial_call=True
 )
 def update_range_inputs(range_types):
     """Enables/disables bound inputs based on the selected range type."""
+    if not range_types:
+        return dash.no_update, dash.no_update
+
+    print(f"Range types: {range_types}")
+
     lower_disabled = [rt == 'below' for rt in range_types]
     upper_disabled = [rt == 'above' for rt in range_types]
     return lower_disabled, upper_disabled

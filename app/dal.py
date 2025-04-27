@@ -60,14 +60,24 @@ def get_all_biomarkers():
     """Retrieves all biomarker definitions from the database."""
     conn = get_db_connection()
     if not conn:
+        print("DAL: Failed to get database connection in get_all_biomarkers()")
         return []
     try:
         cursor = conn.cursor()
         cursor.execute("SELECT id, name, unit, category FROM Biomarkers ORDER BY category, name")
-        biomarkers = [dict(row) for row in cursor.fetchall()]
+        rows = cursor.fetchall()
+        print(f"DAL: Retrieved {len(rows)} biomarker rows from database")
+
+        if not rows:
+            print("DAL: No biomarkers found in database")
+            return []
+
+        biomarkers = [dict(row) for row in rows]
         return biomarkers
     except sqlite3.Error as e:
         print(f"Error getting biomarkers: {e}")
+        import traceback
+        traceback.print_exc()
         return []
     finally:
         if conn:

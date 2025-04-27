@@ -3,6 +3,7 @@ components.py - Reusable UI components for the MediDashboard application.
 """
 
 from dash import dcc, html
+import dash_mantine_components as dmc
 import dash_bootstrap_components as dbc
 import pandas as pd
 from datetime import datetime
@@ -590,26 +591,28 @@ def create_readings_table(readings, biomarker_unit):
         tr = html.Tr([
             html.Td(formatted_time),
             html.Td(formatted_value),
-            html.Td([
-                # Edit button
-                dbc.Button(
-                    html.I(className="fas fa-edit"),
-                    id={'type': 'edit-reading-button', 'index': row['id']},
-                    color="warning",
-                    size="sm",
-                    className="btn-sm me-2",
-                    title="Edit Reading"
-                ),
-                # Delete button
-                dbc.Button(
-                    html.I(className="fas fa-trash"),
-                    id={'type': 'delete-reading-button', 'index': row['id']},
-                    color="danger",
-                    size="sm",
-                    className="btn-sm",
-                    title="Delete Reading"
-                )
-            ], className="d-flex")
+            html.Td(
+                dmc.Group([
+                    # Edit button
+                    dmc.ActionIcon(
+                        html.I(className="fas fa-edit"),
+                        id={'type': 'edit-reading-button', 'index': row['id']},
+                        color="yellow",
+                        variant="filled",
+                        size="md",
+                        radius="md"
+                    ),
+                    # Delete button
+                    dmc.ActionIcon(
+                        html.I(className="fas fa-trash"),
+                        id={'type': 'delete-reading-button', 'index': row['id']},
+                        color="red",
+                        variant="filled",
+                        size="md",
+                        radius="md"
+                    )
+                ], gap="md", justify="center")
+            )
         ])
         rows.append(tr)
 
@@ -622,129 +625,173 @@ def create_readings_table(readings, biomarker_unit):
 
 # --- Navbar Component ---
 # Create a brand element with logo and text
-brand = html.Div(
-    [
-        html.Img(src="/assets/logo.png", height="30px", className="me-2"),
-        "MediDashboard"
-    ],
-    className="d-flex align-items-center"
+brand = dmc.Group([
+    dmc.Image(src="/assets/logo.png", h=30, w="auto"),
+    dmc.Text("MediDashboard", fw=700, size="lg", c="white")  # Explicitly set text color to white
+], gap="xs")
+
+# Create dark mode toggle
+dark_mode_toggle = dmc.ActionIcon(
+    html.I(className="fas fa-moon"),
+    id="dark-mode-toggle",
+    variant="outline",
+    color="blue",
+    radius="xl",
+    size="lg"
 )
 
-# Update the navbar with the new brand
-navbar = dbc.NavbarSimple(
+# Create navbar links
+navbar_links = dmc.Group([
+    dmc.Anchor("Dashboard", href="/", underline=False, c="white"),
+    dmc.Anchor("Settings", href="/settings", underline=False, c="white"),
+    dark_mode_toggle
+], justify="flex-end")
+
+# Create the navbar
+navbar = html.Div(
+    style={
+        "height": "60px",
+        "position": "fixed",
+        "top": 0,
+        "left": 0,
+        "right": 0,
+        "padding": "var(--mantine-spacing-md)",
+        "backgroundColor": "var(--mantine-color-blue-6)",
+        "color": "white",
+        "marginBottom": "0px",
+        "zIndex": 100
+    },
     children=[
-        dbc.NavItem(dbc.NavLink("Dashboard", href="/")),
-        dbc.NavItem(dbc.NavLink("Settings", href="/settings")),
-        # Add other nav items here if needed
-    ],
-    brand=brand,
-    brand_href="/",
-    color="primary",
-    dark=True,
-    className="mb-4", # Margin bottom
+        dmc.Container(
+            fluid=True,
+            children=dmc.Group([
+                dmc.Anchor(brand, href="/", underline=False),
+                navbar_links
+            ], justify="space-between", align="center")
+        )
+    ]
 )
 
 # --- View Readings Modal Structure ---
-view_readings_modal = dbc.Modal(
-    [
-        dbc.ModalHeader(dbc.ModalTitle(id="view-readings-modal-title")),
-        dbc.ModalBody([
-            # Hidden store to keep track of the biomarker ID
-            dcc.Store(id='view-readings-biomarker-id-store', data=None),
-            # Table to display readings
-            html.Div(id="view-readings-table-container"),
-            # Error message area
-            html.Div(id="view-readings-error-message", className="text-danger mt-2")
-        ]),
-        dbc.ModalFooter([
-            dbc.Button("Close", id="view-readings-close-button", color="secondary")
-        ]),
+view_readings_modal = dmc.Modal(
+    title=dmc.Text(id="view-readings-modal-title", fw=700, size="lg"),
+    children=[
+        # Hidden store to keep track of the biomarker ID
+        dcc.Store(id='view-readings-biomarker-id-store', data=None),
+        # Table to display readings
+        html.Div(id="view-readings-table-container"),
+        # Error message area
+        dmc.Text(id="view-readings-error-message", c="red", mt="md"),
+        # Footer with close button
+        dmc.Group(
+            [
+                dmc.Button("Close", id="view-readings-close-button", variant="outline", color="gray")
+            ],
+            justify="flex-end",
+            mt="xl"
+        )
     ],
     id="view-readings-modal",
-    is_open=False,
     size="lg",
-    backdrop="static",
+    opened=False,
+    transitionProps={"duration": 300},
+    overlayProps={"blur": 3},
 )
 
 # --- Delete Reading Confirmation Modal ---
-delete_reading_confirm_modal = dbc.Modal(
-    [
-        dbc.ModalHeader(dbc.ModalTitle("Confirm Deletion")),
-        dbc.ModalBody([
-            # Hidden store to keep track of the reading ID to delete
-            dcc.Store(id='delete-reading-id-store', data=None),
-            html.P("Are you sure you want to delete this reading? This action cannot be undone.")
-        ]),
-        dbc.ModalFooter([
-            dbc.Button("Delete", id="delete-reading-confirm-button", color="danger"),
-            dbc.Button("Cancel", id="delete-reading-cancel-button", color="secondary")
-        ]),
+delete_reading_confirm_modal = dmc.Modal(
+    title=dmc.Text("Confirm Deletion", fw=700, size="lg"),
+    children=[
+        # Hidden store to keep track of the reading ID to delete
+        dcc.Store(id='delete-reading-id-store', data=None),
+        dmc.Text("Are you sure you want to delete this reading? This action cannot be undone.", mb="md"),
+        # Footer with buttons
+        dmc.Group(
+            [
+                dmc.Button("Delete", id="delete-reading-confirm-button", color="red", variant="filled"),
+                dmc.Button("Cancel", id="delete-reading-cancel-button", variant="outline", color="gray")
+            ],
+            justify="flex-end",
+            mt="xl"
+        )
     ],
     id="delete-reading-confirm-modal",
-    is_open=False,
-    backdrop="static",
+    opened=False,
+    transitionProps={"duration": 300},
+    overlayProps={"blur": 3},
 )
 
 # --- Edit Reading Modal ---
-edit_reading_modal = dbc.Modal(
-    [
-        dbc.ModalHeader(dbc.ModalTitle("Edit Reading")),
-        dbc.ModalBody([
-            # Hidden stores to keep track of the reading ID and biomarker ID
-            dcc.Store(id='edit-reading-id-store', data=None),
-            dcc.Store(id='edit-reading-biomarker-id-store', data=None),
-            dcc.Store(id='edit-reading-biomarker-unit-store', data=None),
+edit_reading_modal = dmc.Modal(
+    title=dmc.Text("Edit Reading", fw=700, size="lg"),
+    children=[
+        # Hidden stores to keep track of the reading ID and biomarker ID
+        dcc.Store(id='edit-reading-id-store', data=None),
+        dcc.Store(id='edit-reading-biomarker-id-store', data=None),
+        dcc.Store(id='edit-reading-biomarker-unit-store', data=None),
+        dcc.Store(id="edit-reading-datetime-combined", data=None),
 
-            # Date and time inputs
-            dbc.Row([
-                dbc.Col(dbc.Label("Date & Time:"), width=3),
-                dbc.Col([
+        # Date and time inputs
+        dmc.Grid(
+            [
+                dmc.GridCol(dmc.Text("Date & Time:", fw=500), span=3),
+                dmc.GridCol([
                     # Date picker
-                    dbc.Label("Date:", html_for="edit-reading-date-picker", className="mb-1"),
-                    dcc.DatePickerSingle(
+                    dmc.Text("Date:", fw=500, mb="xs"),
+                    dmc.DatePickerInput(
                         id="edit-reading-date-picker",
-                        display_format="YYYY-MM-DD",
-                        className="date-picker-input mb-2 w-100"
+                        valueFormat="YYYY-MM-DD",
+                        mb="md",
+                        w="100%"
                     ),
                     # Time picker
-                    dbc.Label("Time:", html_for="edit-reading-time-picker", className="mb-1"),
-                    dbc.Input(
+                    dmc.Text("Time:", fw=500, mb="xs"),
+                    dmc.TimeInput(
                         id="edit-reading-time-picker",
-                        type="time",
-                        className="time-picker-input"
-                    ),
-                    # Hidden combined datetime field
-                    dcc.Store(id="edit-reading-datetime-combined", data=None)
-                ], width=9)
-            ], className="mb-3"),
+                        withSeconds=False,
+                        w="100%"
+                    )
+                ], span=9)
+            ],
+            mb="md"
+        ),
 
-            # Value input
-            dbc.Row([
-                dbc.Col(dbc.Label("Value:"), width=3),
-                dbc.Col([
-                    dbc.InputGroup([
-                        dbc.Input(
+        # Value input
+        dmc.Grid(
+            [
+                dmc.GridCol(dmc.Text("Value:", fw=500), span=3),
+                dmc.GridCol([
+                    dmc.Group([
+                        dmc.NumberInput(
                             id="edit-reading-value-input",
-                            type="number",
-                            placeholder="Enter value"
+                            placeholder="Enter value",
+                            w="70%"
                         ),
-                        dbc.InputGroupText(id="edit-reading-unit-display")
-                    ])
-                ], width=9)
-            ], className="mb-3"),
+                        dmc.Text(id="edit-reading-unit-display", w="30%")
+                    ], grow=True)
+                ], span=9)
+            ],
+            mb="md"
+        ),
 
-            # Error message area
-            html.Div(id="edit-reading-error-message", className="text-danger mt-2")
-        ]),
-        dbc.ModalFooter([
-            dbc.Button("Save", id="edit-reading-save-button", color="primary"),
-            dbc.Button("Cancel", id="edit-reading-cancel-button", color="secondary")
-        ]),
+        # Error message area
+        dmc.Text(id="edit-reading-error-message", c="red", mt="md"),
+
+        # Footer with buttons
+        dmc.Group(
+            [
+                dmc.Button("Save", id="edit-reading-save-button", color="blue", variant="filled"),
+                dmc.Button("Cancel", id="edit-reading-cancel-button", variant="outline", color="gray")
+            ],
+            justify="flex-end",
+            mt="xl"
+        )
     ],
     id="edit-reading-modal",
-    is_open=False,
+    opened=False,
     size="md",
-    backdrop="static",
+    transitionProps={"duration": 300},
+    overlayProps={"blur": 3},
 )
 
 # --- CSV Preview and Validation Components ---
@@ -814,7 +861,7 @@ def create_csv_preview_table(preview_data, row_results=None):
                 dbc.Tooltip(
                     tooltip_text,
                     target=f"row-status-{i}",
-                    placement="right"
+                    placement="top"
                 )
             ]
         )
@@ -933,7 +980,7 @@ def create_editable_csv_preview_table(preview_data, row_results=None, id_prefix=
                 dbc.Tooltip(
                     tooltip_text,
                     target=f"{id_prefix}-row-status-{i}",
-                    placement="right"
+                    placement="top"
                 )
             ]
         )
@@ -1063,36 +1110,75 @@ def create_validation_summary(validation_results):
     return summary
 
 # --- Add/Edit Biomarker Modal Structure ---
-biomarker_modal = dbc.Modal(
-    [
-        dbc.ModalHeader(dbc.ModalTitle(id="biomarker-modal-title")),
-        dbc.ModalBody([
-            # Hidden input to store the ID of the biomarker being edited (or None for add)
-            dcc.Store(id='biomarker-edit-id-store', data=None),
-            dbc.Row([
-                dbc.Col(dbc.Label("Name:", html_for="biomarker-modal-name"), width=3),
-                dbc.Col(dbc.Input(id="biomarker-modal-name", type="text", placeholder="e.g., Blood Glucose"), width=9),
-            ], className="mb-3"),
-            dbc.Row([
-                dbc.Col(dbc.Label("Unit:", html_for="biomarker-modal-unit"), width=3),
-                dbc.Col(dbc.Input(id="biomarker-modal-unit", type="text", placeholder="e.g., mg/dL"), width=9),
-            ], className="mb-3"),
-            dbc.Row([
-                dbc.Col(dbc.Label("Category:", html_for="biomarker-modal-category"), width=3),
-                dbc.Col(dbc.Input(id="biomarker-modal-category", type="text", placeholder="(Optional) e.g., Blood Sugar"), width=9),
-            ], className="mb-3"),
-            # Placeholder for potential error messages
-            html.Div(id="biomarker-modal-error-message", style={'color': 'red'})
-        ]),
-        dbc.ModalFooter([
-            dbc.Button("Save", id="biomarker-modal-save-button", color="primary", n_clicks=0),
-            dbc.Button("Cancel", id="biomarker-modal-cancel-button", color="secondary", n_clicks=0),
-        ]),
+biomarker_modal = dmc.Modal(
+    title=dmc.Text(id="biomarker-modal-title", fw=700, size="lg"),
+    children=[
+        # Hidden input to store the ID of the biomarker being edited (or None for add)
+        dcc.Store(id='biomarker-edit-id-store', data=None),
+
+        # Name input
+        dmc.Grid(
+            [
+                dmc.GridCol(dmc.Text("Name:", fw=500), span=3),
+                dmc.GridCol(
+                    dmc.TextInput(
+                        id="biomarker-modal-name",
+                        placeholder="e.g., Blood Glucose"
+                    ),
+                    span=9
+                )
+            ],
+            mb="md"
+        ),
+
+        # Unit input
+        dmc.Grid(
+            [
+                dmc.GridCol(dmc.Text("Unit:", fw=500), span=3),
+                dmc.GridCol(
+                    dmc.TextInput(
+                        id="biomarker-modal-unit",
+                        placeholder="e.g., mg/dL"
+                    ),
+                    span=9
+                )
+            ],
+            mb="md"
+        ),
+
+        # Category input
+        dmc.Grid(
+            [
+                dmc.GridCol(dmc.Text("Category:", fw=500), span=3),
+                dmc.GridCol(
+                    dmc.TextInput(
+                        id="biomarker-modal-category",
+                        placeholder="(Optional) e.g., Blood Sugar"
+                    ),
+                    span=9
+                )
+            ],
+            mb="md"
+        ),
+
+        # Error message area
+        dmc.Text(id="biomarker-modal-error-message", c="red", mt="md"),
+
+        # Footer with buttons
+        dmc.Group(
+            [
+                dmc.Button("Save", id="biomarker-modal-save-button", color="blue", variant="filled", n_clicks=0),
+                dmc.Button("Cancel", id="biomarker-modal-cancel-button", variant="outline", color="gray", n_clicks=0)
+            ],
+            justify="flex-end",
+            mt="xl"
+        )
     ],
     id="biomarker-modal",
-    is_open=False,  # Modal is closed initially
+    opened=False,
     size="lg",
-    backdrop="static",
+    transitionProps={"duration": 300},
+    overlayProps={"blur": 3},
 )
 
 # --- Biomarker Card Component ---
@@ -1226,32 +1312,39 @@ def create_biomarker_card(biomarker, readings=None, reference_range=None):
             ], className="sparkline-graph")
 
     # Create the card header with biomarker name, unit, and buttons
-    header = html.Div([
-        html.Div([
-            html.Span(biomarker['name'], className="h5 me-2"),
-            html.Small(f"({biomarker['unit']})", className="text-muted")
-        ], className="d-flex align-items-center"),
-        html.Div([
-            # View Readings button with eye icon
-            dbc.Button(
-                html.I(className="fas fa-eye"),  # Eye icon
-                id={'type': 'view-readings-button', 'index': biomarker['id']},
-                color="secondary",
-                size="sm",
-                className="me-2",
-                title="View All Readings"
-            ),
-            # Add Reading button with plus icon
-            dbc.Button(
-                html.I(className="fas fa-plus"),  # Plus icon
-                id={'type': 'add-reading-button', 'index': biomarker['id']},
-                color="primary",
-                size="sm",
-                className="",
-                title="Add New Reading"
-            )
-        ], className="ms-auto d-flex align-items-center")
-    ], className="card-header d-flex justify-content-between align-items-center")
+    header = dmc.CardSection(
+        dmc.Group([
+            dmc.Group([
+                dmc.Text(biomarker['name'], fw=700, size="lg"),
+                dmc.Text(f"({biomarker['unit']})", c="dimmed", size="sm")
+            ], gap="xs"),
+            dmc.Group([
+                # View Readings button with eye icon
+                dmc.ActionIcon(
+                    html.I(className="fas fa-eye"),
+                    id={'type': 'view-readings-button', 'index': biomarker['id']},
+                    color="gray",
+                    variant="light",
+                    size="lg",
+                    radius="xl",
+                    style={"boxShadow": "0 1px 3px rgba(0,0,0,0.1)"}
+                ),
+                # Add Reading button with plus icon
+                dmc.ActionIcon(
+                    html.I(className="fas fa-plus"),
+                    id={'type': 'add-reading-button', 'index': biomarker['id']},
+                    color="blue",
+                    variant="filled",
+                    size="lg",
+                    radius="xl",
+                    style={"boxShadow": "0 2px 4px rgba(0,0,0,0.2)"}
+                )
+            ], gap="md")
+        ], justify="space-between"),
+        withBorder=True,
+        py="sm",
+        px="md"
+    )
 
     # Create the card body with value and timestamp
     body_content = [
@@ -1263,7 +1356,12 @@ def create_biomarker_card(biomarker, readings=None, reference_range=None):
         body_content.append(html.P(timestamp_text, className="text-muted small mb-2"))
 
     # Create the card body with position relative for the risk indicator
-    body = dbc.CardBody(body_content, className="position-relative p-2")
+    body = dmc.CardSection(
+        body_content,
+        p="sm",
+        withBorder=False,
+        style={"position": "relative"}
+    )
 
     # Add the sparkline as the main content - it will now take up most of the card
     if sparkline:
@@ -1274,7 +1372,15 @@ def create_biomarker_card(biomarker, readings=None, reference_range=None):
         body.children.append(risk_indicator)
 
     # Create the card
-    card = dbc.Card([header, body], className="mb-3 biomarker-card")
+    card = dmc.Card(
+        [header, body],
+        shadow="md",
+        radius="lg",
+        withBorder=True,
+        p="xs",
+        style={"height": "100%"},
+        className="biomarker-card"
+    )
 
     return card
 
@@ -1374,68 +1480,96 @@ def create_range_indicator(value, reference_range):
     return indicator
 
 # --- Data Entry Modal Structure ---
-add_reading_modal = dbc.Modal(
-    [
-        dbc.ModalHeader(dbc.ModalTitle("Add New Biomarker Reading")),
-        dbc.ModalBody([
-            dbc.Row([
-                dbc.Col(dbc.Label("Biomarker:", html_for="modal-biomarker-dropdown"), width=3),
-                dbc.Col(dcc.Dropdown(id="modal-biomarker-dropdown", placeholder="Select Biomarker..."), width=9),
-            ], className="mb-3"),
-            dbc.Row([
-                dbc.Col(dbc.Label("Date & Time:", html_for="modal-datetime-picker"), width=3),
-                dbc.Col([
+add_reading_modal = dmc.Modal(
+    title=dmc.Text("Add New Biomarker Reading", fw=700, size="lg"),
+    children=[
+        # Biomarker dropdown
+        dmc.Grid(
+            [
+                dmc.GridCol(dmc.Text("Biomarker:", fw=500), span=3),
+                dmc.GridCol(
+                    dcc.Dropdown(
+                        id="modal-biomarker-dropdown",
+                        placeholder="Select Biomarker..."
+                    ),
+                    span=9
+                )
+            ],
+            mb="md"
+        ),
+
+        # Date and time inputs
+        dmc.Grid(
+            [
+                dmc.GridCol(dmc.Text("Date & Time:", fw=500), span=3),
+                dmc.GridCol([
                     # Keep the original input but hide it for backward compatibility
-                    dbc.Input(
-                        id="modal-datetime-input",
-                        type="text",
-                        style={"display": "none"},
-                        placeholder="YYYY-MM-DD HH:MM:SS"
+                    html.Div(
+                        dcc.Input(
+                            id="modal-datetime-input",
+                            type="text",
+                            placeholder="YYYY-MM-DD HH:MM:SS"
+                        ),
+                        style={"display": "none"}
                     ),
-                    # Use DatePickerSingle for date selection with proper calendar UI
-                    dcc.DatePickerSingle(
+                    # Date picker
+                    dmc.Text("Date:", fw=500, mb="xs"),
+                    dmc.DatePickerInput(
                         id="modal-date-picker",
+                        valueFormat="YYYY-MM-DD",
                         placeholder="Select date",
-                        display_format="YYYY-MM-DD",
-                        first_day_of_week=1,  # Monday as first day
                         clearable=True,
-                        # Removed with_portal=True to fix z-index issues
-                        min_date_allowed=None,  # Can be set to limit date selection
-                        max_date_allowed=None,  # Can be set to limit date selection
-                        initial_visible_month=None,  # Current month by default
-                        className="mb-2 w-100 date-picker-input"  # Added custom class for styling
+                        mb="md",
+                        w="100%"
                     ),
-                    # Time picker using HTML5 time input
-                    dbc.Input(
+                    # Time picker
+                    dmc.Text("Time:", fw=500, mb="xs"),
+                    dmc.TimeInput(
                         id="modal-time-picker",
-                        type="time",
-                        placeholder="Select time",
-                        className="w-100 time-picker-input"  # Added custom class for styling
+                        withSeconds=False,
+                        w="100%"
                     ),
-                    # Hidden field to store combined date and time
+                    # Hidden store to combine date and time
                     dcc.Store(id="modal-datetime-combined", data=None)
-                ], width=9),
-            ], className="mb-3"),
-            dbc.Row([
-                dbc.Col(dbc.Label("Value:", html_for="modal-value-input"), width=3),
-                dbc.Col(
-                    dbc.InputGroup([
-                        dbc.Input(id="modal-value-input", type="number", placeholder="Enter value"),
-                        dbc.InputGroupText(id="modal-unit-display", children="Units") # Unit displayed here
-                    ]),
-                    width=9
-                ),
-            ], className="mb-3"),
-            # Placeholder for potential error messages
-            html.Div(id="modal-error-message", style={'color': 'red'})
-        ]),
-        dbc.ModalFooter([
-            dbc.Button("Save", id="modal-save-button", color="primary", n_clicks=0),
-            dbc.Button("Cancel", id="modal-cancel-button", color="secondary", n_clicks=0),
-        ]),
+                ], span=9)
+            ],
+            mb="md"
+        ),
+
+        # Value input
+        dmc.Grid(
+            [
+                dmc.GridCol(dmc.Text("Value:", fw=500), span=3),
+                dmc.GridCol([
+                    dmc.Group([
+                        dmc.NumberInput(
+                            id="modal-value-input",
+                            placeholder="Enter value",
+                            w="70%"
+                        ),
+                        dmc.Text(id="modal-unit-display", w="30%")
+                    ], grow=True)
+                ], span=9)
+            ],
+            mb="md"
+        ),
+
+        # Error message area
+        dmc.Text(id="modal-error-message", c="red", mt="md"),
+
+        # Footer with buttons
+        dmc.Group(
+            [
+                dmc.Button("Save", id="modal-save-button", color="blue", variant="filled", n_clicks=0),
+                dmc.Button("Cancel", id="modal-cancel-button", variant="outline", color="gray", n_clicks=0)
+            ],
+            justify="flex-end",
+            mt="xl"
+        )
     ],
     id="add-reading-modal",
-    is_open=False, # Modal is closed initially
-    size="lg", # Larger modal
-    backdrop="static", # Prevent closing by clicking outside
+    opened=False,
+    size="lg",
+    transitionProps={"duration": 300},
+    overlayProps={"blur": 3},
 )
