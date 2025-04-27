@@ -572,7 +572,7 @@ body {
 
 /* Sparkline graph styles - Apple Health style */
 .sparkline-graph {
-    margin-top: 10px; /* Reduced top margin */
+    margin-top: 8px; /* Further reduced top margin */
     margin-bottom: 5px; /* Added small bottom margin */
     width: 100%;
     display: block !important;
@@ -596,14 +596,16 @@ body {
     overflow: hidden !important;
     display: block;
     background: transparent;
-    scrollbar-width: none; /* Firefox */
-    -ms-overflow-style: none; /* IE and Edge */
-    max-height: 160px; /* Ensure it doesn't exceed this height */
+    scrollbar-width: none !important; /* Firefox */
+    -ms-overflow-style: none !important; /* IE and Edge */
+    max-height: 180px; /* Match the chart height */
 }
 
 /* Hide scrollbar for Chrome, Safari and Opera */
 .biomarker-chart::-webkit-scrollbar {
-    display: none;
+    display: none !important;
+    width: 0 !important;
+    height: 0 !important;
 }
 
 /* Fix for Vega-Lite charts to prevent scrollbars */

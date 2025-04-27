@@ -343,9 +343,7 @@ def create_sparkline_chart(readings, reference_range=None):
                     labelOverlap='parity',  # Handle label overlap
                     labelLimit=30,  # Limit label width
                     labelPadding=2,  # Minimal padding for better space usage
-                    tickCount=4,  # Limit the number of ticks to prevent overcrowding
-                    offset=0,  # Position axis at the edge of the chart
-                    orient='bottom'  # Ensure axis is at the bottom
+                    tickCount=4  # Limit the number of ticks to prevent overcrowding
                 )),
         y=alt.Y('value:Q',
                 scale=alt.Scale(
@@ -366,9 +364,7 @@ def create_sparkline_chart(readings, reference_range=None):
                     gridDash=[2, 2],
                     labelLimit=30,  # Limit label width
                     labelPadding=2,  # Minimal padding for better space usage
-                    tickCount=4,  # Fewer ticks for cleaner appearance
-                    offset=0,  # Position axis at the edge of the chart
-                    orient='left'  # Ensure axis is at the left
+                    tickCount=4  # Fewer ticks for cleaner appearance
                 )),
         tooltip=[
             alt.Tooltip('formatted_date:N', title='Date'),
@@ -462,7 +458,7 @@ def create_sparkline_chart(readings, reference_range=None):
     ).properties(
         width='container',  # Responsive width to fit container
         height=180,         # Increased height to accommodate labels
-        padding={'left': 2, 'right': 2, 'top': 5, 'bottom': 20},  # Minimal padding to maximize chart area
+        padding={'left': 5, 'right': 5, 'top': 5, 'bottom': 20},  # Minimal padding to maximize chart area
         autosize={'type': 'fit', 'contains': 'padding'},  # Ensure chart fits within container
         usermeta={"embedOptions": {"actions": False}}  # Disable the three-dot menu
     ).configure_axis(
@@ -512,11 +508,10 @@ def embed_altair_chart(chart, height=180):
             'border': 'none',
             'width': '100%',  # Use 100% width to fill container
             'height': f"{height}px",
-            'overflow': 'hidden !important',  # Force hidden overflow
+            'overflow': 'hidden',  # Force hidden overflow
             'display': 'block',
             'margin': '0',
             'padding': '0',
-            'scrolling': 'no',  # Prevent scrollbars (as style property)
             'borderRadius': '8px',  # Rounded corners for Apple-style
             'boxShadow': '0 1px 3px rgba(0,0,0,0.1)'  # Subtle shadow for depth
         },

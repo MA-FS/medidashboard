@@ -68,13 +68,13 @@ settings_layout = dbc.Container(fluid=True, className="px-0 g-0", children=[
         dcc.Tab(label="Manage Biomarkers", value="tab-manage-biomarkers", children=[
             dbc.Card(dbc.CardBody([
                 html.H4("Defined Biomarkers", className="card-title"),
-                html.Div(id="biomarker-table-container"),
                 dbc.Button(
                     [html.I(className="fas fa-plus me-2"), "Add New Biomarker"],
                     id="add-biomarker-button",
                     color="primary",
-                    className="mt-3 settings-btn-primary"
+                    className="mb-3 settings-btn-primary"
                 ),
+                html.Div(id="biomarker-table-container"),
                 dcc.Store(id='biomarker-update-trigger', data=0), # Trigger store for table refresh
                 dcc.Store(id='biomarker-delete-id-store', data=None), # Store ID for delete confirmation
                 dcc.ConfirmDialog(
