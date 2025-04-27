@@ -33,8 +33,8 @@ MediDashboard is a web-based application that allows users to track and visualiz
 
 1. Clone the repository:
    ```
-   git clone https://github.com/MA-FS/medi-dashboard.git
-   cd medi-dashboard
+   git clone https://github.com/MA-FS/medidashboard.git
+   cd medidashboard
    ```
 
 2. Create and activate a virtual environment:
