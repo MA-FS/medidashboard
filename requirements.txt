@@ -1,0 +1,9 @@
+dash
+plotly
+pytest
+dash-bootstrap-components==1.6.0
+pandas
+pytest-playwright
+dash-bootstrap-templates
+python-dateutil
+altair

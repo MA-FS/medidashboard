@@ -1,0 +1,1265 @@
+/*
+ * custom.css - Apple Human Interface Guidelines styling for MediDashboard
+ *
+ * This file applies Apple-style design principles to the MediDashboard application,
+ * including typography, colors, component styling, and layout.
+ * Updated to match latest Apple Human Interface Guidelines with dark mode support.
+ */
+
+/* ----- Typography ----- */
+
+/* Use system fonts (SF Pro on macOS/iOS, similar system fonts on other platforms) */
+body, button, input, select, textarea {
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display",
+               "Helvetica Neue", Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+/* Typography scale - refined to match Apple's latest guidelines */
+h1, .h1 { font-size: 34px; font-weight: 700; line-height: 1.2; letter-spacing: -0.022em; }
+h2, .h2 { font-size: 28px; font-weight: 700; line-height: 1.2; letter-spacing: -0.021em; }
+h3, .h3 { font-size: 24px; font-weight: 600; line-height: 1.3; letter-spacing: -0.019em; }
+h4, .h4 { font-size: 20px; font-weight: 600; line-height: 1.3; letter-spacing: -0.017em; }
+h5, .h5 { font-size: 17px; font-weight: 600; line-height: 1.4; letter-spacing: -0.015em; }
+h6, .h6 { font-size: 15px; font-weight: 600; line-height: 1.4; letter-spacing: -0.014em; }
+
+p, .body-text {
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 1.5;
+  letter-spacing: -0.011em;
+}
+
+.small-text {
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 1.4;
+  letter-spacing: -0.008em;
+}
+
+/* Caption text style */
+.caption-text {
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 1.33;
+  letter-spacing: 0;
+  color: var(--apple-text-secondary);
+}
+
+/* ----- Colors ----- */
+
+/* Apple system colors with dark mode support */
+:root {
+  /* Base colors - Light Mode */
+  --apple-blue: rgb(0, 122, 255);
+  --apple-green: rgb(52, 199, 89);
+  --apple-indigo: rgb(88, 86, 214);
+  --apple-orange: rgb(255, 149, 0);
+  --apple-pink: rgb(255, 45, 85);
+  --apple-purple: rgb(175, 82, 222);
+  --apple-red: rgb(255, 59, 48);
+  --apple-teal: rgb(90, 200, 250);
+  --apple-yellow: rgb(255, 204, 0);
+
+  /* Neutral colors - Light Mode */
+  --apple-gray: rgb(142, 142, 147);
+  --apple-gray2: rgb(174, 174, 178);
+  --apple-gray3: rgb(199, 199, 204);
+  --apple-gray4: rgb(209, 209, 214);
+  --apple-gray5: rgb(229, 229, 234);
+  --apple-gray6: rgb(242, 242, 247);
+
+  /* Semantic colors - Light Mode */
+  --apple-background: rgb(255, 255, 255);
+  --apple-elevated-background: rgb(255, 255, 255);
+  --apple-text: rgb(0, 0, 0);
+  --apple-text-secondary: rgb(60, 60, 67);
+  --apple-text-tertiary: rgba(60, 60, 67, 0.6);
+  --apple-separator: rgba(60, 60, 67, 0.29);
+  --apple-opaque-separator: rgb(224, 224, 224);
+
+  /* Component-specific colors - Light Mode */
+  --apple-card-background: rgb(255, 255, 255);
+  --apple-nav-background: rgba(255, 255, 255, 0.85);
+  --apple-nav-text: rgb(0, 0, 0);
+  --apple-card-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  --apple-card-shadow-hover: 0 4px 12px rgba(0, 0, 0, 0.12);
+  --apple-backdrop-blur: saturate(180%) blur(20px);
+
+  /* Status colors - Light Mode */
+  --apple-success-background: rgba(52, 199, 89, 0.12);
+  --apple-warning-background: rgba(255, 149, 0, 0.12);
+  --apple-error-background: rgba(255, 59, 48, 0.12);
+  --apple-info-background: rgba(0, 122, 255, 0.12);
+}
+
+/* Dark mode colors */
+@media (prefers-color-scheme: dark) {
+  :root {
+    /* Base colors - Dark Mode */
+    --apple-blue: rgb(10, 132, 255);
+    --apple-green: rgb(48, 209, 88);
+    --apple-indigo: rgb(94, 92, 230);
+    --apple-orange: rgb(255, 159, 10);
+    --apple-pink: rgb(255, 55, 95);
+    --apple-purple: rgb(191, 90, 242);
+    --apple-red: rgb(255, 69, 58);
+    --apple-teal: rgb(100, 210, 255);
+    --apple-yellow: rgb(255, 214, 10);
+
+    /* Neutral colors - Dark Mode */
+    --apple-gray: rgb(142, 142, 147);
+    --apple-gray2: rgb(99, 99, 102);
+    --apple-gray3: rgb(72, 72, 74);
+    --apple-gray4: rgb(58, 58, 60);
+    --apple-gray5: rgb(44, 44, 46);
+    --apple-gray6: rgb(28, 28, 30);
+
+    /* Semantic colors - Dark Mode */
+    --apple-background: rgb(0, 0, 0);
+    --apple-elevated-background: rgb(28, 28, 30);
+    --apple-text: rgb(255, 255, 255);
+    --apple-text-secondary: rgba(235, 235, 245, 0.6);
+    --apple-text-tertiary: rgba(235, 235, 245, 0.3);
+    --apple-separator: rgba(84, 84, 88, 0.6);
+    --apple-opaque-separator: rgb(56, 56, 58);
+
+    /* Component-specific colors - Dark Mode */
+    --apple-card-background: rgb(28, 28, 30);
+    --apple-nav-background: rgba(0, 0, 0, 0.85);
+    --apple-nav-text: rgb(255, 255, 255);
+    --apple-card-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+    --apple-card-shadow-hover: 0 4px 12px rgba(0, 0, 0, 0.6);
+
+    /* Status colors - Dark Mode */
+    --apple-success-background: rgba(48, 209, 88, 0.12);
+    --apple-warning-background: rgba(255, 159, 10, 0.12);
+    --apple-error-background: rgba(255, 69, 58, 0.12);
+    --apple-info-background: rgba(10, 132, 255, 0.12);
+  }
+
+  /* Invert images that should be dark in dark mode */
+  .invert-in-dark-mode {
+    filter: invert(1);
+  }
+}
+
+/* Apply colors to components */
+/* Navbar styling */
+.navbar {
+  background-color: var(--apple-nav-background) !important;
+  backdrop-filter: var(--apple-backdrop-blur);
+  -webkit-backdrop-filter: var(--apple-backdrop-blur);
+  border-bottom: 1px solid var(--apple-separator);
+  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.05);
+  padding: 12px 20px;
+  transition: background-color 0.3s ease;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+.navbar-dark {
+  background-color: var(--apple-blue) !important;
+}
+
+.navbar-light {
+  color: var(--apple-nav-text);
+}
+
+.navbar-brand {
+  font-weight: 600;
+  font-size: 20px;
+  color: var(--apple-text);
+  transition: opacity 0.2s ease;
+  display: flex;
+  align-items: center;
+}
+
+.navbar-brand img {
+  margin-right: 8px;
+  transition: transform 0.2s ease;
+}
+
+.navbar-brand:hover img {
+  transform: scale(1.05);
+}
+
+.navbar-brand:hover {
+  opacity: 0.8;
+}
+
+/* Button styling */
+.btn {
+  border-radius: 10px;
+  font-weight: 500;
+  padding: 8px 16px;
+  transition: all 0.2s ease;
+  border: none;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+  position: relative;
+  overflow: hidden;
+}
+
+.btn::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: transparent;
+  transition: background-color 0.2s ease;
+  pointer-events: none;
+}
+
+.btn:active::after {
+  background-color: rgba(0, 0, 0, 0.1);
+}
+
+.btn-primary {
+  background-color: var(--apple-blue);
+  color: white;
+}
+
+.btn-primary:hover {
+  background-color: var(--apple-blue);
+  opacity: 0.9;
+  transform: translateY(-1px);
+}
+
+.btn-primary:focus {
+  box-shadow: 0 0 0 3px rgba(0, 122, 255, 0.3);
+}
+
+.btn-success {
+  background-color: var(--apple-green);
+  color: white;
+}
+
+.btn-success:hover {
+  background-color: var(--apple-green);
+  opacity: 0.9;
+  transform: translateY(-1px);
+}
+
+.btn-success:focus {
+  box-shadow: 0 0 0 3px rgba(52, 199, 89, 0.3);
+}
+
+.btn-danger {
+  background-color: var(--apple-red);
+  color: white;
+}
+
+.btn-danger:hover {
+  background-color: var(--apple-red);
+  opacity: 0.9;
+  transform: translateY(-1px);
+}
+
+.btn-danger:focus {
+  box-shadow: 0 0 0 3px rgba(255, 59, 48, 0.3);
+}
+
+.btn-warning {
+  background-color: var(--apple-orange);
+  color: white;
+}
+
+.btn-warning:hover {
+  background-color: var(--apple-orange);
+  opacity: 0.9;
+  transform: translateY(-1px);
+}
+
+.btn-warning:focus {
+  box-shadow: 0 0 0 3px rgba(255, 149, 0, 0.3);
+}
+
+.btn-info {
+  background-color: var(--apple-teal);
+  color: white;
+}
+
+.btn-info:hover {
+  background-color: var(--apple-teal);
+  opacity: 0.9;
+  transform: translateY(-1px);
+}
+
+.btn-info:focus {
+  box-shadow: 0 0 0 3px rgba(90, 200, 250, 0.3);
+}
+
+/* Small button style */
+.btn-sm {
+  border-radius: 8px;
+  padding: 6px 12px;
+  font-size: 14px;
+}
+
+/* Icon buttons */
+.btn-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.btn-icon-sm {
+  width: 30px;
+  height: 30px;
+}
+
+.btn-icon:hover {
+  transform: translateY(-1px);
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+@media (prefers-color-scheme: dark) {
+  .btn-icon:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+  }
+}
+
+/* Text colors */
+.text-muted {
+  color: var(--apple-text-tertiary) !important;
+}
+
+.text-primary {
+  color: var(--apple-blue) !important;
+}
+
+.text-success {
+  color: var(--apple-green) !important;
+}
+
+.text-danger {
+  color: var(--apple-red) !important;
+}
+
+.text-warning {
+  color: var(--apple-orange) !important;
+}
+
+.text-info {
+  color: var(--apple-teal) !important;
+}
+
+/* Background colors */
+.bg-light {
+  background-color: var(--apple-gray6) !important;
+}
+
+.bg-primary {
+  background-color: var(--apple-blue) !important;
+}
+
+.bg-success {
+  background-color: var(--apple-success-background) !important;
+}
+
+.bg-danger {
+  background-color: var(--apple-error-background) !important;
+}
+
+.bg-warning {
+  background-color: var(--apple-warning-background) !important;
+}
+
+.bg-info {
+  background-color: var(--apple-info-background) !important;
+}
+
+/* ----- Component Styling ----- */
+
+/* Cards with Apple-style rounded corners and subtle shadows */
+.card {
+  border-radius: 12px;
+  border: none;
+  box-shadow: var(--apple-card-shadow);
+  transition: all 0.3s ease;
+  background-color: var(--apple-card-background);
+  overflow: hidden;
+  color: var(--apple-text);
+}
+
+.card:hover {
+  box-shadow: var(--apple-card-shadow-hover);
+  transform: translateY(-2px);
+}
+
+.card-header {
+  background-color: transparent;
+  border-bottom: 1px solid var(--apple-separator);
+  padding: 16px 20px;
+  font-weight: 500;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.card-body {
+  padding: 20px;
+  position: relative;
+}
+
+.card-footer {
+  background-color: transparent;
+  border-top: 1px solid var(--apple-separator);
+  padding: 16px 20px;
+}
+
+/* Card header button styles */
+.card-header .btn {
+  padding: 6px 12px;
+  font-size: 14px;
+  line-height: 1.5;
+  border-radius: 8px;
+}
+
+/* Icon button styles */
+.card-header .btn i {
+  font-size: 14px;
+}
+
+/* Add hover effect to icon buttons */
+.card-header .btn:hover {
+  transform: scale(1.05);
+  transition: transform 0.2s ease;
+}
+
+/* Range indicator styles */
+/* Range Indicator - Apple Health style */
+.range-indicator {
+    background: var(--apple-gray6);
+    border-radius: 10px;
+    height: 10px;
+    position: relative;
+    margin: 20px 0;
+    overflow: hidden;
+}
+
+.range-bar {
+    position: relative;
+    height: 100%;
+    width: 100%;
+    border-radius: 5px;
+    overflow: hidden;
+    margin-bottom: 5px;
+}
+
+.range-indicator .normal-range {
+    position: absolute;
+    height: 100%;
+    background-color: rgba(52, 199, 89, 0.3);
+    z-index: 1;
+}
+
+.marker, .range-indicator .marker {
+    background: var(--apple-blue);
+    border-radius: 50%;
+    height: 18px;
+    width: 18px;
+    position: absolute;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    transition: left 0.3s ease;
+    z-index: 2;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+.range-indicator .marker.in-range {
+    background: var(--apple-green);
+}
+
+.range-indicator .marker.out-of-range {
+    background: var(--apple-red);
+}
+
+.range-indicator .range-labels {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 8px;
+}
+
+.range-indicator .range-label {
+    font-size: 12px;
+    color: var(--apple-text-secondary);
+    font-weight: 500;
+}
+
+/* Biomarker Card - Apple Health style */
+.biomarker-card {
+    background-color: var(--apple-card-background);
+    border-radius: 16px;
+    border: none;
+    box-shadow: var(--apple-card-shadow);
+    transition: all 0.3s ease;
+    margin-bottom: 24px;
+    overflow: hidden;
+    color: var(--apple-text);
+    position: relative;
+}
+
+.biomarker-card:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--apple-card-shadow-hover);
+}
+
+/* Sparkline graph styles - Apple Health style */
+.sparkline-graph {
+    margin-top: 16px;
+    width: 100%;
+    display: block !important;
+    position: relative;
+    overflow: hidden !important; /* Changed from visible to hidden to prevent scrollbars */
+    padding: 0;
+    border-radius: 12px; /* Add border radius for Apple-like appearance */
+    box-shadow: none; /* Remove any shadow */
+    background-color: var(--apple-card-background);
+    height: 160px; /* Reduced height to match chart height */
+    max-height: 160px; /* Ensure it doesn't exceed this height */
+}
+
+/* Biomarker chart styles */
+.biomarker-chart {
+    border: none !important;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden !important;
+    display: block;
+    background: transparent;
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* IE and Edge */
+    max-height: 160px; /* Ensure it doesn't exceed this height */
+}
+
+/* Hide scrollbar for Chrome, Safari and Opera */
+.biomarker-chart::-webkit-scrollbar {
+    display: none;
+}
+
+/* Fix for Vega-Lite charts to prevent scrollbars */
+.vega-embed {
+    width: 100% !important;
+    height: 100% !important;
+    overflow: hidden !important;
+}
+
+.vega-embed .marks {
+    overflow: visible !important;
+}
+
+/* Ensure the SVG fits properly */
+.vega-embed svg {
+    max-width: 100% !important;
+    max-height: 100% !important;
+}
+
+/* Chart container styling */
+.chart-container {
+    border-radius: 12px;
+    overflow: hidden;
+    background-color: var(--apple-card-background);
+    box-shadow: var(--apple-card-shadow);
+    margin-bottom: 20px;
+    transition: all 0.3s ease;
+}
+
+.chart-container:hover {
+    box-shadow: var(--apple-card-shadow-hover);
+    transform: translateY(-2px);
+}
+
+/* Risk indicator styles */
+.risk-indicator {
+    width: 10px;
+    height: 100%;
+    position: absolute;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    z-index: 10;  /* Ensure it's above other elements */
+    border-radius: 0 12px 12px 0; /* Round the right corners */
+}
+
+/* Category section styles */
+.category-section {
+    margin-bottom: 32px;
+}
+
+.category-title {
+    border-bottom: 2px solid var(--apple-blue);
+    padding-bottom: 8px;
+    margin-bottom: 16px;
+    font-weight: 600;
+    color: var(--apple-text);
+}
+
+/* Value Display - Large, prominent value */
+.value-display {
+    font-size: 38px;
+    font-weight: 700;
+    color: var(--apple-text);
+    margin: 16px 0;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    transition: color 0.3s ease;
+    font-variant-numeric: tabular-nums; /* Ensure numbers align properly */
+    font-feature-settings: "tnum"; /* Additional support for tabular numbers */
+}
+
+.value-display.text-success {
+    color: var(--apple-green);
+}
+
+.value-display.text-danger {
+    color: var(--apple-red);
+}
+
+.value-display.text-warning {
+    color: var(--apple-orange);
+}
+
+/* Scientific notation formatting */
+.scientific-notation {
+    font-size: 0.8em; /* Slightly smaller font for exponents */
+}
+
+.scientific-notation sup {
+    font-size: 0.7em; /* Make superscript smaller */
+    position: relative;
+    top: -0.5em; /* Adjust superscript position */
+    margin-left: 2px;
+}
+
+/* Improved number formatting */
+.formatted-number {
+    display: inline-block; /* Ensure proper alignment */
+}
+
+/* Biomarker card header styles */
+.biomarker-card .card-header {
+    background-color: transparent;
+    border-bottom: 1px solid var(--apple-separator);
+    padding: 16px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* Action Icons - Clean, minimal buttons */
+.action-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--apple-gray6);
+    transition: all 0.2s ease;
+    color: var(--apple-text-secondary);
+    border: none;
+    cursor: pointer;
+}
+
+.action-icon:hover {
+    background: var(--apple-gray5);
+    transform: translateY(-1px);
+}
+
+.action-icon:active {
+    transform: translateY(0);
+}
+
+/* Text Styles */
+.biomarker-name {
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--apple-text);
+    letter-spacing: -0.01em;
+}
+
+.biomarker-unit {
+    font-size: 14px;
+    color: var(--apple-text-secondary);
+    margin-left: 4px;
+}
+
+.last-updated {
+    font-size: 13px;
+    color: var(--apple-text-secondary);
+    margin-top: 8px;
+    display: flex;
+    align-items: center;
+}
+
+.last-updated i {
+    margin-right: 4px;
+    font-size: 12px;
+}
+
+/* Add tooltip styles */
+[title] {
+    position: relative;
+    cursor: help;
+}
+
+/* ----- Date and Time Picker Styling ----- */
+
+/* Fix z-index for date picker calendar to appear above modal */
+.SingleDatePicker_picker {
+    z-index: 1500 !important; /* Higher than Bootstrap modal (1050) */
+    position: absolute !important;
+}
+
+/* Ensure the date picker portal is properly positioned */
+.SingleDatePickerInput_calendarIcon {
+    padding: 0 !important;
+}
+
+/* Fix positioning of the date picker portal */
+.SingleDatePicker_positionWrapper {
+    position: static !important;
+}
+
+/* Style date picker input to match other form controls */
+.date-picker-input .SingleDatePickerInput {
+    border-radius: 10px;
+    border-color: var(--apple-gray4);
+    width: 100%;
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display",
+                "Helvetica Neue", Arial, sans-serif;
+    font-size: 16px;
+    background-color: var(--apple-elevated-background);
+    transition: all 0.2s ease;
+}
+
+.date-picker-input .DateInput {
+    width: 100%;
+    background-color: transparent;
+}
+
+.date-picker-input .DateInput_input {
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 1.5;
+    padding: 10px 14px;
+    border-radius: 10px;
+    color: var(--apple-text);
+    background-color: transparent;
+}
+
+.date-picker-input .DateInput_input:focus {
+    border-color: var(--apple-blue);
+    box-shadow: 0 0 0 3px rgba(0, 122, 255, 0.25);
+    outline: none;
+}
+
+/* Calendar styling */
+.CalendarDay {
+    border-radius: 50%;
+}
+
+.CalendarDay__selected {
+    background-color: var(--apple-blue);
+    border-color: var(--apple-blue);
+}
+
+.CalendarDay__selected:hover {
+    background-color: var(--apple-blue);
+    border-color: var(--apple-blue);
+}
+
+.CalendarDay__hovered_span,
+.CalendarDay__selected_span {
+    background-color: rgba(0, 122, 255, 0.1);
+    border-color: rgba(0, 122, 255, 0.2);
+    color: var(--apple-blue);
+}
+
+/* Calendar container styling */
+.DayPicker {
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+    background-color: var(--apple-card-background);
+}
+
+/* Fix calendar positioning in modal */
+.DayPickerNavigation_button {
+    border: none;
+    background: transparent;
+}
+
+.DayPickerNavigation_button:focus {
+    outline: none;
+}
+
+/* Ensure calendar fits within modal */
+.DayPicker_weekHeader {
+    top: 8px;
+}
+
+.CalendarMonth {
+    padding: 0 8px;
+}
+
+/* Make sure calendar is fully visible */
+.SingleDatePicker_picker__directionLeft {
+    left: 0 !important;
+}
+
+/* Fix for date picker positioning */
+.SingleDatePicker {
+    display: block;
+    width: 100%;
+}
+
+/* Ensure the date picker portal is properly positioned */
+.SingleDatePickerInput {
+    display: block;
+    width: 100%;
+}
+
+/* Fix for date picker in modal */
+.DateRangePicker_picker, .SingleDatePicker_picker {
+    position: fixed !important;
+    top: auto !important;
+    bottom: auto !important;
+    left: auto !important;
+    transform: none !important;
+}
+
+/* Ensure calendar doesn't get cut off at bottom of modal */
+.modal-body {
+    overflow: visible;
+}
+
+.modal-content {
+    overflow: visible;
+}
+
+/* Style time picker input to match other form controls */
+.time-picker-input {
+    font-size: 16px !important;
+    font-weight: 400 !important;
+    line-height: 1.5 !important;
+    height: auto !important;
+    padding: 10px 14px !important;
+    border-radius: 10px !important;
+    border-color: var(--apple-gray4) !important;
+    background-color: var(--apple-elevated-background) !important;
+    color: var(--apple-text) !important;
+    transition: all 0.2s ease !important;
+}
+
+.time-picker-input:focus {
+    border-color: var(--apple-blue) !important;
+    box-shadow: 0 0 0 3px rgba(0, 122, 255, 0.25) !important;
+    outline: none !important;
+}
+
+/* ----- Layout and Spacing ----- */
+
+/* Consistent spacing with Apple-like metrics */
+.container-fluid, .container {
+    padding-left: 24px;
+    padding-right: 24px;
+    max-width: 1280px;
+    margin: 0 auto;
+}
+
+.row {
+    margin-left: -12px;
+    margin-right: -12px;
+}
+
+.col, [class*="col-"] {
+    padding-left: 12px;
+    padding-right: 12px;
+}
+
+/* Section spacing */
+.section {
+    margin-bottom: 32px;
+}
+
+.section-title {
+    margin-bottom: 16px;
+    font-weight: 600;
+}
+
+/* Grid Layout - Responsive grid for biomarker cards */
+.biomarker-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 24px;
+    margin-top: 24px;
+}
+
+/* Filter Section - Clean, minimal filter UI */
+.filter-section {
+    background: var(--apple-gray6);
+    border-radius: 16px;
+    padding: 24px;
+    margin-bottom: 28px;
+    transition: all 0.3s ease;
+}
+
+.filter-section:hover {
+    box-shadow: var(--apple-card-shadow);
+}
+
+.filter-section h4 {
+    margin-bottom: 16px;
+    color: var(--apple-text);
+}
+
+/* Empty state styling */
+.empty-state {
+    text-align: center;
+    padding: 40px 20px;
+    background-color: var(--apple-gray6);
+    border-radius: 16px;
+    margin: 20px 0;
+}
+
+.empty-state-icon {
+    font-size: 48px;
+    color: var(--apple-text-tertiary);
+    margin-bottom: 16px;
+}
+
+.empty-state-title {
+    font-size: 20px;
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: var(--apple-text);
+}
+
+.empty-state-message {
+    color: var(--apple-text-secondary);
+    margin-bottom: 20px;
+    max-width: 400px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* Spacing utilities */
+.mt-lg { margin-top: 32px; }
+.mb-lg { margin-bottom: 32px; }
+.ml-lg { margin-left: 32px; }
+.mr-lg { margin-right: 32px; }
+
+.p-lg { padding: 32px; }
+.pt-lg { padding-top: 32px; }
+.pb-lg { padding-bottom: 32px; }
+.pl-lg { padding-left: 32px; }
+.pr-lg { padding-right: 32px; }
+
+/* ----- Responsive Adjustments ----- */
+
+@media (max-width: 768px) {
+    .container-fluid, .container {
+        padding-left: 16px;
+        padding-right: 16px;
+    }
+
+    h1, .h1 { font-size: 28px; }
+    h2, .h2 { font-size: 24px; }
+    h3, .h3 { font-size: 20px; }
+    h4, .h4 { font-size: 18px; }
+
+    .card {
+        margin-bottom: 16px;
+    }
+
+    .navbar {
+        padding: 8px 16px;
+    }
+
+    .nav-tabs {
+        width: 100%;
+        display: flex;
+    }
+
+    .nav-tabs .nav-link {
+        flex: 1;
+        text-align: center;
+    }
+
+    .modal-content {
+        margin: 0 16px;
+    }
+
+    .biomarker-grid {
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
+
+    .filter-section {
+        padding: 16px;
+        margin-bottom: 20px;
+    }
+
+    .value-display {
+        font-size: 32px;
+    }
+
+    .sparkline-graph {
+        height: 140px;
+        max-height: 140px;
+    }
+
+    .biomarker-chart {
+        max-height: 140px;
+    }
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.fade-in {
+    animation: fadeIn 0.3s ease forwards;
+}
+
+/* Apple-style loading animation */
+@keyframes pulse {
+    0% { transform: scale(0.95); opacity: 0.7; }
+    50% { transform: scale(1.05); opacity: 1; }
+    100% { transform: scale(0.95); opacity: 0.7; }
+}
+
+.apple-loading {
+    animation: pulse 1.5s infinite ease-in-out;
+}
+
+/* Biomarker chart styling */
+.biomarker-chart {
+    border-radius: 8px;
+    overflow: hidden;
+    margin-top: 10px;
+    transition: all 0.3s ease;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.biomarker-chart:hover {
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+    transform: translateY(-2px);
+}
+
+/* Basic loading spinner styling */
+#loading-biomarkers {
+    margin-top: 100px; /* Add space at the top */
+}
+
+/* Make the spinner more visible */
+._dash-loading {
+    margin: 0 auto; /* Center horizontally */
+    display: block; /* Ensure it's a block element */
+}
+
+/* Empty state for when no biomarkers have readings */
+.empty-biomarkers-state {
+    text-align: center;
+    padding: 60px 20px;
+    background-color: var(--apple-gray6);
+    border-radius: 16px;
+    margin: 20px 0;
+}
+
+.empty-biomarkers-icon {
+    font-size: 48px;
+    color: var(--apple-text-tertiary);
+    margin-bottom: 16px;
+}
+
+.empty-biomarkers-title {
+    font-size: 20px;
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: var(--apple-text);
+}
+
+.empty-biomarkers-message {
+    color: var(--apple-text-secondary);
+    margin-bottom: 20px;
+    max-width: 500px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* Reduced motion preference */
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+}
+
+/* ----- Form Controls ----- */
+
+/* Inputs with Apple-style appearance */
+.form-control, .input-group-text {
+  border-radius: 10px;
+  border-color: var(--apple-gray4);
+  padding: 10px 14px;
+  background-color: var(--apple-elevated-background);
+  color: var(--apple-text);
+  transition: all 0.2s ease;
+}
+
+.form-control:focus {
+  border-color: var(--apple-blue);
+  box-shadow: 0 0 0 3px rgba(0, 122, 255, 0.25);
+  outline: none;
+}
+
+.form-control::placeholder {
+  color: var(--apple-text-tertiary);
+}
+
+.form-label {
+  font-weight: 500;
+  margin-bottom: 8px;
+  color: var(--apple-text-secondary);
+}
+
+/* Form validation states */
+.was-validated .form-control:valid, .form-control.is-valid {
+  border-color: var(--apple-green);
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 8'%3e%3cpath fill='%2334c759' d='M2.3 6.73L.6 4.53c-.4-1.04.46-1.4 1.1-.8l1.1 1.4 3.4-3.8c.6-.63 1.6-.27 1.2.7l-4 4.6c-.43.5-.8.4-1.1.1z'/%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right calc(0.375em + 0.1875rem) center;
+  background-size: calc(0.75em + 0.375rem) calc(0.75em + 0.375rem);
+}
+
+.was-validated .form-control:invalid, .form-control.is-invalid {
+  border-color: var(--apple-red);
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12' width='12' height='12' fill='none' stroke='%23ff3b30'%3e%3ccircle cx='6' cy='6' r='4.5'/%3e%3cpath stroke-linejoin='round' d='M5.8 3.6h.4L6 6.5z'/%3e%3ccircle cx='6' cy='8.2' r='.6' fill='%23ff3b30' stroke='none'/%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right calc(0.375em + 0.1875rem) center;
+  background-size: calc(0.75em + 0.375rem) calc(0.75em + 0.375rem);
+}
+
+/* Modals with Apple-style appearance */
+.modal-content {
+  border-radius: 16px;
+  border: none;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  background-color: var(--apple-card-background);
+  color: var(--apple-text);
+  overflow: visible; /* Changed from hidden to visible to allow date picker to show */
+  position: relative;
+}
+
+.modal-backdrop.show {
+  opacity: 0.5;
+  backdrop-filter: blur(5px);
+}
+
+.modal-header {
+  border-bottom: 1px solid var(--apple-separator);
+  padding: 20px 24px;
+}
+
+.modal-title {
+  font-weight: 600;
+  font-size: 20px;
+}
+
+.modal-body {
+  padding: 24px;
+  overflow: visible; /* Ensure date picker can extend outside */
+  position: static; /* Help with date picker positioning */
+}
+
+.modal-footer {
+  border-top: 1px solid var(--apple-separator);
+  padding: 16px 24px;
+}
+
+.modal .btn-close {
+  background-color: var(--apple-gray5);
+  border-radius: 50%;
+  opacity: 1;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.2s ease;
+}
+
+.modal .btn-close:hover {
+  background-color: var(--apple-gray4);
+}
+
+/* Fix for date picker in modal */
+.modal-dialog {
+  overflow: visible;
+}
+
+/* Ensure modal doesn't cut off date picker */
+.modal {
+  overflow: visible !important;
+}
+
+/* Ensure form rows in modal have proper spacing for date picker */
+.modal .row {
+  margin-bottom: 24px;
+  position: static; /* Help with date picker positioning */
+}
+
+/* Add specific styling for the add reading modal */
+#add-reading-modal .modal-body {
+  padding-bottom: 32px; /* Extra padding at bottom for date picker */
+}
+
+/* Background logo styling */
+.background-logo {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 60vh; /* Size relative to viewport height */
+  height: 60vh;
+  opacity: 0.2; /* Increased opacity to make it more visible */
+  z-index: -1; /* Behind all content */
+  pointer-events: none; /* Ensures clicks pass through to elements below */
+  object-fit: contain; /* Maintain aspect ratio */
+}
+
+/* Dark mode adjustments for background logo */
+@media (prefers-color-scheme: dark) {
+  .background-logo {
+    opacity: 0.15; /* Increased opacity but still subtle in dark mode */
+    filter: brightness(0.8); /* Dim the logo slightly in dark mode */
+  }
+}
+
+/* Responsive adjustments for small screens */
+@media (max-width: 768px) {
+  .background-logo {
+    width: 50vh; /* Smaller on mobile devices */
+    height: 50vh;
+  }
+}
