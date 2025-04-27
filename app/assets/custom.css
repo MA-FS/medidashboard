@@ -570,6 +570,40 @@ body {
     box-shadow: var(--apple-card-shadow-hover);
 }
 
+/* Biomarker card glow effects */
+.biomarker-card-normal {
+    box-shadow: 0 0 20px rgba(40, 167, 69, 0.4), 0 0 40px rgba(40, 167, 69, 0.3), 0 0 60px rgba(40, 167, 69, 0.2), 0 0 80px rgba(40, 167, 69, 0.1);
+    border: 1px solid rgba(40, 167, 69, 0.5);
+}
+
+.biomarker-card-normal:hover {
+    box-shadow: 0 0 25px rgba(40, 167, 69, 0.5), 0 0 50px rgba(40, 167, 69, 0.35), 0 0 75px rgba(40, 167, 69, 0.25), 0 0 100px rgba(40, 167, 69, 0.15);
+    border: 1px solid rgba(40, 167, 69, 0.6);
+    transform: translateY(-3px);
+}
+
+.biomarker-card-abnormal {
+    box-shadow: 0 0 20px rgba(220, 53, 69, 0.4), 0 0 40px rgba(220, 53, 69, 0.3), 0 0 60px rgba(220, 53, 69, 0.2), 0 0 80px rgba(220, 53, 69, 0.1);
+    border: 1px solid rgba(220, 53, 69, 0.5);
+}
+
+.biomarker-card-abnormal:hover {
+    box-shadow: 0 0 25px rgba(220, 53, 69, 0.5), 0 0 50px rgba(220, 53, 69, 0.35), 0 0 75px rgba(220, 53, 69, 0.25), 0 0 100px rgba(220, 53, 69, 0.15);
+    border: 1px solid rgba(220, 53, 69, 0.6);
+    transform: translateY(-3px);
+}
+
+.biomarker-card-neutral {
+    box-shadow: 0 0 20px rgba(108, 117, 125, 0.35), 0 0 40px rgba(108, 117, 125, 0.25), 0 0 60px rgba(108, 117, 125, 0.15), 0 0 80px rgba(108, 117, 125, 0.1);
+    border: 1px solid rgba(108, 117, 125, 0.4);
+}
+
+.biomarker-card-neutral:hover {
+    box-shadow: 0 0 25px rgba(108, 117, 125, 0.4), 0 0 50px rgba(108, 117, 125, 0.3), 0 0 75px rgba(108, 117, 125, 0.2), 0 0 100px rgba(108, 117, 125, 0.15);
+    border: 1px solid rgba(108, 117, 125, 0.45);
+    transform: translateY(-3px);
+}
+
 /* Sparkline graph styles - Apple Health style */
 .sparkline-graph {
     margin-top: 8px; /* Further reduced top margin */
@@ -1212,6 +1246,139 @@ body {
 .pl-lg { padding-left: 32px; }
 .pr-lg { padding-right: 32px; }
 
+/* ----- Settings Page Styling ----- */
+
+/* Modern Settings Page Header */
+.settings-page-header {
+    margin-bottom: 24px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--apple-separator);
+    animation: fadeIn 0.4s ease-out;
+}
+
+/* Modern Apple-style Tabs */
+.dash-tabs {
+    margin-bottom: 24px;
+    border-bottom: none !important;
+    position: relative;
+    animation: fadeIn 0.5s ease-out;
+}
+
+/* Tab container */
+.dash-tab-container {
+    background-color: var(--apple-card-background);
+    border-radius: 12px;
+    box-shadow: var(--apple-card-shadow);
+    padding: 0;
+    overflow: hidden;
+    margin-top: 16px;
+    animation: fadeIn 0.6s ease-out;
+    border: none !important;
+}
+
+/* Tab content */
+.dash-tab-content {
+    padding: 0;
+    border: none !important;
+}
+
+/* Tabs styling */
+.dash-tabs .tab {
+    padding: 0 !important;
+    border: none !important;
+}
+
+/* Tab items */
+.dash-tab-parent {
+    display: flex;
+    background-color: transparent !important;
+    border-bottom: 1px solid var(--apple-separator) !important;
+    padding: 0 16px !important;
+    margin-bottom: 0 !important;
+}
+
+/* Individual tab */
+.tab-container {
+    margin-right: 8px !important;
+}
+
+/* Tab links */
+.tab {
+    font-weight: 500 !important;
+    color: var(--apple-text-secondary) !important;
+    background-color: transparent !important;
+    border: none !important;
+    border-radius: 8px 8px 0 0 !important;
+    padding: 12px 20px !important;
+    transition: all 0.2s ease !important;
+    position: relative !important;
+    margin-bottom: -1px !important;
+    font-size: 15px !important;
+    letter-spacing: -0.01em !important;
+}
+
+/* Tab hover state */
+.tab:hover {
+    color: var(--apple-blue) !important;
+    background-color: rgba(0, 122, 255, 0.05) !important;
+}
+
+/* Selected tab */
+.tab--selected {
+    color: var(--apple-blue) !important;
+    font-weight: 600 !important;
+    background-color: transparent !important;
+    border-bottom: 2px solid var(--apple-blue) !important;
+}
+
+/* Selected tab after element (indicator line) */
+.tab--selected::after {
+    content: '';
+    position: absolute;
+    bottom: -1px;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background-color: var(--apple-blue);
+    border-radius: 2px 2px 0 0;
+    animation: tabIndicatorAppear 0.3s ease-out;
+}
+
+@keyframes tabIndicatorAppear {
+    from {
+        opacity: 0;
+        transform: scaleX(0.5);
+    }
+    to {
+        opacity: 1;
+        transform: scaleX(1);
+    }
+}
+
+/* Settings card styling */
+.settings-card {
+    border-radius: 12px !important;
+    border: none !important;
+    box-shadow: var(--apple-card-shadow) !important;
+    transition: all 0.3s ease !important;
+    overflow: hidden !important;
+    margin-bottom: 24px !important;
+    animation: fadeIn 0.5s ease-out !important;
+}
+
+.settings-card:hover {
+    box-shadow: var(--apple-card-shadow-hover) !important;
+    transform: translateY(-2px) !important;
+}
+
+.settings-card .card-title {
+    font-weight: 600 !important;
+    color: var(--apple-text) !important;
+    margin-bottom: 16px !important;
+    font-size: 18px !important;
+    letter-spacing: -0.01em !important;
+}
+
 /* ----- Responsive Adjustments ----- */
 
 @media (max-width: 768px) {
@@ -1233,14 +1400,16 @@ body {
         padding: 8px 16px;
     }
 
-    .nav-tabs {
-        width: 100%;
-        display: flex;
+    /* Responsive tabs */
+    .dash-tab-parent {
+        overflow-x: auto;
+        flex-wrap: nowrap;
+        padding: 0 8px !important;
     }
 
-    .nav-tabs .nav-link {
-        flex: 1;
-        text-align: center;
+    .tab {
+        padding: 10px 16px !important;
+        white-space: nowrap;
     }
 
     .modal-content {

@@ -1538,6 +1538,16 @@ def create_biomarker_card(biomarker, readings=None, reference_range=None):
 
     body.children.append(action_buttons)
 
+    # Determine card class based on biomarker state
+    card_class = "biomarker-card"
+    if in_range is not None:
+        if in_range:
+            card_class += " biomarker-card-normal"
+        else:
+            card_class += " biomarker-card-abnormal"
+    else:
+        card_class += " biomarker-card-neutral"
+
     # Create the card
     card = dmc.Card(
         [header, body],
@@ -1546,7 +1556,7 @@ def create_biomarker_card(biomarker, readings=None, reference_range=None):
         withBorder=True,
         p="xs",
         style={"height": "100%"},
-        className="biomarker-card"
+        className=card_class
     )
 
     return card

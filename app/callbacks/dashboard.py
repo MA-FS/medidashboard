@@ -219,7 +219,7 @@ def update_dashboard(selected_category, reading_trigger, visible_biomarker_ids, 
                 dmc.SimpleGrid(
                     children=cards,
                     cols={"base": 1, "sm": 2, "lg": 3},
-                    spacing="md",
+                    spacing="xl",
                     className="mb-4"
                 )
             ], className="category-section")

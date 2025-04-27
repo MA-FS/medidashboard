@@ -62,11 +62,15 @@ dashboard_layout = dbc.Container(fluid=True, className="px-0 g-0", children=[
 
 # --- Settings Layout ---
 settings_layout = dbc.Container(fluid=True, className="px-0 g-0", children=[
-    html.H3("Settings"),
+    html.Div([
+        html.H3("Settings", className="mb-0"),
+        html.P("Configure your biomarkers, reference ranges, and data management options",
+               className="text-muted mt-1")
+    ], className="settings-page-header"),
     # Use dcc.Tabs for callbacks triggered by tab activation
-    dcc.Tabs(id="settings-tabs", value='tab-manage-biomarkers', children=[
-        dcc.Tab(label="Manage Biomarkers", value="tab-manage-biomarkers", children=[
-            dbc.Card(dbc.CardBody([
+    dcc.Tabs(id="settings-tabs", value='tab-manage-biomarkers', className="dash-tabs", children=[
+        dcc.Tab(label="Manage Biomarkers", value="tab-manage-biomarkers", className="tab", selected_className="tab--selected", children=[
+            dbc.Card(className="settings-card", children=dbc.CardBody([
                 html.H4("Defined Biomarkers", className="card-title"),
                 dbc.Button(
                     [html.I(className="fas fa-plus me-2"), "Add New Biomarker"],
@@ -83,8 +87,8 @@ settings_layout = dbc.Container(fluid=True, className="px-0 g-0", children=[
                 ),
             ]))
         ]),
-        dcc.Tab(label="Reference Ranges", value="tab-reference-ranges", children=[
-            dbc.Card(dbc.CardBody([
+        dcc.Tab(label="Reference Ranges", value="tab-reference-ranges", className="tab", selected_className="tab--selected", children=[
+            dbc.Card(className="settings-card", children=dbc.CardBody([
                 html.H4("Configure Reference Ranges", className="card-title"),
                 html.P("Set reference ranges for your biomarkers to visualize when values are within or outside normal ranges."),
                 html.Div(id="reference-range-container"),
@@ -98,8 +102,8 @@ settings_layout = dbc.Container(fluid=True, className="px-0 g-0", children=[
                 dcc.Store(id='reference-range-update-trigger', data=0), # Trigger store for refresh
             ]))
         ]),
-        dcc.Tab(label="Data Management", value="tab-data-management", children=[
-            dbc.Card(dbc.CardBody([
+        dcc.Tab(label="Data Management", value="tab-data-management", className="tab", selected_className="tab--selected", children=[
+            dbc.Card(className="settings-card", children=dbc.CardBody([
                 html.H4("Data Export & Import", className="card-title"),
                 html.P("Export your biomarker data as CSV or import readings from a CSV file."),
                 dbc.Button(
@@ -133,7 +137,7 @@ settings_layout = dbc.Container(fluid=True, className="px-0 g-0", children=[
 
                 # Step 1: Select CSV File
                 dbc.Card([
-                    dbc.CardHeader("Step 1: Select CSV File"),
+                    dbc.CardHeader("Step 1: Select CSV File", className="fw-bold"),
                     dbc.CardBody([
                         dcc.Upload(
                             id='upload-readings',
@@ -160,7 +164,7 @@ settings_layout = dbc.Container(fluid=True, className="px-0 g-0", children=[
 
                 # Step 2: Validate CSV Data
                 dbc.Card([
-                    dbc.CardHeader("Step 2: Validate CSV Data"),
+                    dbc.CardHeader("Step 2: Validate CSV Data", className="fw-bold"),
                     dbc.CardBody([
                         dbc.Row([
                             dbc.Col(
@@ -207,7 +211,7 @@ settings_layout = dbc.Container(fluid=True, className="px-0 g-0", children=[
 
                 # Step 3: Import Data
                 dbc.Card([
-                    dbc.CardHeader("Step 3: Import Data"),
+                    dbc.CardHeader("Step 3: Import Data", className="fw-bold"),
                     dbc.CardBody([
                         dbc.Row([
                             dbc.Col(
@@ -239,7 +243,7 @@ settings_layout = dbc.Container(fluid=True, className="px-0 g-0", children=[
 
                 # Download Template
                 dbc.Card([
-                    dbc.CardHeader("Need Help?"),
+                    dbc.CardHeader("Need Help?", className="fw-bold"),
                     dbc.CardBody([
                         html.P("Download a template CSV file to get started:"),
                         dbc.Button(
